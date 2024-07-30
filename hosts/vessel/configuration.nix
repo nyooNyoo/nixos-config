@@ -68,7 +68,6 @@
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
-    enableSSHSupport = true;
   };
 
   system.stateVersion = "24.05"; # Did you read the comment?
