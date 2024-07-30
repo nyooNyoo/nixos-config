@@ -3,7 +3,7 @@
     ./system.nix
     ./security.nix
     ./network.nix
-    #./secrets.nix
+    ./secrets.nix
     ./nix.nix
     ./users.nix
     #./openssh.nix
