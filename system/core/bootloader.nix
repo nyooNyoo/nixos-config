@@ -28,14 +28,14 @@ in {
       # https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS#NixOS_installation
       luks.devices = {
         "nixos-enc" = {
-          device = "/dev/disk/by-uuid/df0d8f1e-6b1a-436e-97cc-dd8410cfe2d9";
+          device = "/dev/disk/by-label/fsroot";
           preLVM = true;
           yubikey = {
             slot = 2;
             gracePeriod = 999;
             twoFactor = false;
             storage = {
-              device = "/dev/disk/by-uuid/3382-5527";
+              device = "/dev/disk/by-label/uefi";
             };
           };
         };
