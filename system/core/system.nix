@@ -17,7 +17,6 @@
       enable = true;
       resyncTimer = "10m";
     };
-    getty.autologinUser = "nyoo";
   };
   
   programs = {
@@ -28,8 +27,6 @@
     EDITOR = "vim";
     BROWSER = "firefox";
   };
-
-  environment.loginShellInit = ''[[ "$(tty)" == /dev/tty1 ]] && sway --unsupported-gpu'';
 
   environment.systemPackages = with pkgs; [
     git

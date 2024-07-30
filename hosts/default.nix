@@ -6,9 +6,8 @@
   inherit (self) inputs;
   core = ../system/core;
   bootloader = ../system/core/bootloader.nix;
-  #impermanence = ../system/core/impermanence.nix;
-  #server = ../system/server;
-  #wayland = ../system/wayland;
+  impermanence = ../system/core/impermanence.nix;
+  wayland = ../system/wayland;
   hw = inputs.nixos-hardware.nixosModules;
   agenix = inputs.agenix.nixosModules.age;
   hmModule = inputs.home-manager.nixosModules.home-manager;
@@ -37,7 +36,7 @@ in {
       [
         {networking.hostName = "vessel";}
         ./vessel
-        #wayland
+        wayland
         hmModule
         bootloader
         #impermanence

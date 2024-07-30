@@ -17,7 +17,7 @@ in {
     };
 
     # Silent boot
-    consoleLogLevel = mkDefault 0;
+    consoleLogLevel = 0;
     plymouth.enable = true; 
     
     initrd = {
@@ -43,9 +43,9 @@ in {
     };
     
     # Bleeding edge linux :)
-    kernelPackages = mkDefault pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
-      "psmouse.synaptics_intertouch=1" #more consistent touchpad behavior
+      "psmouse.synaptics_intertouch=1" # more consistent touchpad behavior
       "quiet"
       "splash"
       "rd.systemd.show_status=false"
@@ -57,9 +57,7 @@ in {
       options i915 enable_guc=2
       options iwlwifi power_save=1 disable_11ax=1
     '';
-    #https://wiki.archlinux.org/title/Intel_graphics#Enable_GuC_/_HuC_firmware_loading
 
-    bootspec.enable = mkDefault true;
     loader = {
       systemd-boot.enable = mkDefault true;
       # spam space to get to boot menu
