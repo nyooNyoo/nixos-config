@@ -29,11 +29,12 @@
   };
 
   environment.systemPackages = with pkgs; [
+    vim
     git
     uutils-coreutils-noprefix
     btrfs-progs
     cifs-utils
-    emptty
+    home-manager
     starship # having starship here means pkgs.startship will be stored during build and not during promptInit
   ];
 
@@ -49,6 +50,7 @@
   in {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-${variant}.psf.gz";
     earlySetup = true;
+    keyMap = "us";
   };
 
   programs.nix-ld.enable = true;

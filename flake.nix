@@ -120,7 +120,7 @@
       flake = {
         nixosConfigurations = import ./hosts inputs;
       };
-    });
+   });
 
 }
 

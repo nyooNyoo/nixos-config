@@ -14,8 +14,7 @@
 
   shared = [core agenix];
 
-  /*
-  home-manager = {
+  /*home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
     extraSpecialArgs = {
@@ -23,12 +22,12 @@
       inherit self;
     };
     users.nyoo = {
-      #imports = [../home];
+      imports = [../home];
 
-      #_module.args.theme = import ../theme;
+     # _module.args.theme = import ../theme;
     };
-  };
-  */
+  };*/
+
 in {
   vessel = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
@@ -37,7 +36,7 @@ in {
         {networking.hostName = "vessel";}
         ./vessel
         wayland
-        hmModule
+        #hmModule
         bootloader
         #impermanence
         hw.dell-xps-15-9520-nvidia

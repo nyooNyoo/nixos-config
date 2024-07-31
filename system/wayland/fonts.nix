@@ -26,8 +26,8 @@
     # this fixes emoji stuff
     fontconfig = {
       defaultFonts = {
-        monospace = [ "JetBrains Mono" "JetBrainsMono Nerd Font" "Twitter Color Emoji" "Material Icons Sharp" ];
-        sansSerif = ["Jost*" "Twitter Color Emoji"];
+        monospace = [ "JetBrainsMono Nerd Font Mono" "Twitter Color Emoji" "Material Icons Sharp" ];
+        sansSerif = ["JetBrainsMonoNL Nerd Font Propo" "Twitter Color Emoji"];
         serif = ["Noto Serif" "Twitter Color Emoji" ];
         emoji = [ "Twitter Color Emoji" ];
       };
