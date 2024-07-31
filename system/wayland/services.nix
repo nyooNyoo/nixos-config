@@ -24,7 +24,7 @@
       enable = true;
       settings = rec {
         initial_session = {
-          command = "sway --unsupported-gpu";
+          command = "sway";
           user = "nyoo";
         };
         default_session = initial_session;

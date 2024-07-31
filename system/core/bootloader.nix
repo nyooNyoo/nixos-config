@@ -28,7 +28,7 @@ in {
       # https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS#NixOS_installation
       luks.devices = {
         "nixos-enc" = {
-          device = "/dev/disk/by-label/fsroot";
+          device = "/dev/disk/by-label/enroot";
           preLVM = true;
           yubikey = {
             slot = 2;

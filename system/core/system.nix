@@ -59,29 +59,6 @@
   in {
     inherit extraConfig;
     user = {inherit extraConfig;};
-
-    /*
-    autologin = {
-      enable = true;
-      description = "Autologin";
-      after = [ "systemd-user-sessions.servie" "plymouth-quit-wait.service" "getty@tty1.service" ];
-      conflicts = [ "getty@tty1.service" ];
-      aliases = [ "display-manager.service" ]
-      
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "autologin nyoo 'sway --unsupported-gpu'";
-        IgnoreSIGPIPE = "no";
-        SendSIGHUP = "yes";
-        TimeoutStopSec = "30s";
-        KeyringMode = "shared";
-        Restart = "always";
-        RestartSec = 1;
-        StartLimitBurst = 5;
-        StartLimitInterval = 30;
-      };
-    };
-    */
     # Systemd OOMd
     # Fedora enables these options by default. See the 10-oomd-* files here:
     # https://src.fedoraproject.org/rpms/systemd/tree/acb90c49c42276b06375a66c73673ac3510255

@@ -11,7 +11,6 @@
       comfortaa
       inter
       lato
-      lexend
       jost
       dejavu_fonts
       iosevka-bin
@@ -27,15 +26,10 @@
     # this fixes emoji stuff
     fontconfig = {
       defaultFonts = {
-        monospace = [
-          "Iosevka Term"
-          "Iosevka Term Nerd Font Complete Mono"
-          "Iosevka Nerd Font"
-          "Noto Color Emoji"
-        ];
-        sansSerif = ["Lexend" "Noto Color Emoji"];
-        serif = ["Noto Serif" "Noto Color Emoji"];
-        emoji = ["Noto Color Emoji"];
+        monospace = [ "JetBrains Mono" "JetBrainsMono Nerd Font" "Twitter Color Emoji" "Material Icons Sharp" ];
+        sansSerif = ["Jost*" "Twitter Color Emoji"];
+        serif = ["Noto Serif" "Twitter Color Emoji" ];
+        emoji = [ "Twitter Color Emoji" ];
       };
     };
   };

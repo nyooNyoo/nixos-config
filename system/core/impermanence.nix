@@ -37,11 +37,11 @@
     umount /btrfs_tmp
   '';
 
-  fileSystems."/persistent" = {
+  fileSystems."/persist" = {
     device = "/dev/disk/by-label/fsroot";
     neededForBoot = true;
     fsType = "btrfs";
-    options = [ "subvol=persistent" ];
+    options = [ "subvol=persist" ];
   };
 
   fileSystems."/nix" = {
