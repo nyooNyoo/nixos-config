@@ -54,6 +54,7 @@
   };
 
   programs.nix-ld.enable = true;
+  programs.dconf.enable = true;
   systemd = let
     extraConfig = ''
       DefaultTimeoutStopSec=15s
