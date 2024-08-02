@@ -8,10 +8,6 @@
       packages = with pkgs; [dconf gcr];
       enable = true;
     };
-    journald.extraConfig = ''
-      SystemMaxUse=50M
-      RuntimeMaxUse=10M
-    '';
     # on-disk browser sync
     psd = {
       enable = true;

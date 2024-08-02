@@ -1,6 +1,4 @@
 {pkgs, ...}:
-# this makes our system more secure
-# note that it might break some stuff, eg webcam
 {
   services = {
     physlock = {

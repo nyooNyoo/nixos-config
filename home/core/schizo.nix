@@ -1,22 +1,9 @@
-{inputs, ...}: {
-  imports = [ inputs.schizofox.homeManagerModule ] ;
-programs.schizofox = {
+{inputs, config, ...}: {
+config.programs.schizofox = {
   enable = true;
 
   theme = {
-    colors = {
-      background-darker = "181825";
-      background = "1e1e2e";
-      foreground = "cdd6f4";
-    };
-
-    font = "Lexend";
-
-    extraUserChrome = ''
-      body {
-        color: red !important;
-      }
-    '';
+    font = "JetBrainsMono Nerd Font Propo";
   };
 
   search = {
@@ -33,7 +20,7 @@ programs.schizofox = {
   };
 
   misc = {
-    drmFix = true;
+    drm.enable = true;
     disableWebgl = false;
     contextMenu.enable = true;
   };
@@ -42,17 +29,10 @@ programs.schizofox = {
     simplefox.enable = true;
     darkreader.enable = true;
 
+    extraExtensions = {
+      "firefox@betterttv.net".install_url = "https://addons.mozilla.org/firefox/downloads/latest/betterttv/latest.xpi";
+    };
   };
-
-  bookmarks = [
-    {
-      Title = "Example";
-      URL = "https://example.com";
-      Favicon = "https://example.com/favicon.ico";
-      Placement = "toolbar";
-      Folder = "FolderName";
-    }
-  ];
 
 };
 }
