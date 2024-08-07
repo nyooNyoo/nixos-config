@@ -6,11 +6,6 @@
 
 {
   imports = [inputs.impermanence.nixosModule];
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/fsroot";
-    fsType = "btrfs";
-    options = [ "subvol=root" ];
-  };
 
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     mkdir /btrfs_tmp
@@ -36,24 +31,6 @@
     btrfs subvolume create /btrfs_tmp/root
     umount /btrfs_tmp
   '';
-
-  fileSystems."/persist" = {
-    device = "/dev/disk/by-label/fsroot";
-    neededForBoot = true;
-    fsType = "btrfs";
-    options = [ "subvol=persist" ];
-  };
-
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-label/fsroot";
-    fsType = "btrfs";
-    options = [ "subvol=nix" ];
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/uefi";
-    fsType = "vfat";
-  };
 
   environment.persistence."/persist" = {
     enable = true;
