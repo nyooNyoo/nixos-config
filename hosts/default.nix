@@ -4,15 +4,13 @@
   ...
 }: let
   inherit (self) inputs;
+
   core = ../system/core;
   bootloader = ../system/core/bootloader.nix;
-  impermanence = ../system/core/impermanence.nix;
+  #impermanence = ../system/core/impermanence.nix;
   wayland = ../system/wayland;
   hw = inputs.nixos-hardware.nixosModules;
-  agenix = inputs.agenix.nixosModules.age;
-
-  shared = [core agenix];
-
+  firefox = ../modules/firefox.nix;
 
 in {
   vessel = nixpkgs.lib.nixosSystem {
@@ -25,8 +23,9 @@ in {
         bootloader
         #impermanence
         hw.dell-xps-15-9520-nvidia
-      ]
-      ++ shared;
+        core
+        firefox
+      ];
     specialArgs = {inherit inputs;};
   };
 }

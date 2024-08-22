@@ -12,7 +12,6 @@
     sessionVariables.FLAKE = "/home/nyoo/nixos-config";
     etc = {
       "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
-      "nix/flake-channels/home-manager".source = inputs.home-manager;
     };
 
     systemPackages = with pkgs; [
@@ -21,7 +20,6 @@
       alejandra
       statix
       nix-output-monitor
-      inputs.agenix.packages."${system}".default
     ];
     defaultPackages = [];
   };

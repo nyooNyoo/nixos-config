@@ -46,6 +46,7 @@
 
     lorri.enable = true;
     printing.enable = true;
+    libinput.enable = true;
     fstrim.enable = true;
   };
 }

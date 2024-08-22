@@ -32,7 +32,7 @@ in {
 
   # encrypted dns
   services.dnscrypt-proxy2 = {
-    enable = true;
+    enable = false;
     settings = {
       ipv6_servers = true;
       require_dnssec = true;

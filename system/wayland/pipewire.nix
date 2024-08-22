@@ -1,4 +1,8 @@
-_: {
+{
+  pkgs,
+  ...
+}:
+{
   services.pipewire = {
     enable = true;
     alsa = {
@@ -9,4 +13,7 @@ _: {
     pulse.enable = true;
     jack.enable = true;
   };
+  environment.systemPackages = with pkgs; [
+    pavucontrol
+  ];
 }

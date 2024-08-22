@@ -6,7 +6,6 @@
   inherit (lib) mkDefault;
 in {
   environment.systemPackages = [
-    # For debugging and troubleshooting Secure Boot.
     pkgs.sbctl
   ];
  
@@ -23,21 +22,20 @@ in {
     initrd = {
       verbose = false;
       kernelModules = [ "vfat" "nls_cp437" "nls_iso8859-1" "usbhid" ];
-      luks.yubikeySupport = true;
+      secrets = {
+        "/secrets/luks.key" = "/persist/secrets/luks.key";
+      };
       
-      # https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS#NixOS_installation
       luks.devices = {
-        "nixos-enc" = {
-          device = "/dev/disk/by-label/enroot";
+        crypted-1 = {
           preLVM = true;
-          yubikey = {
-            slot = 2;
-            gracePeriod = 999;
-            twoFactor = false;
-            storage = {
-              device = "/dev/disk/by-label/uefi";
-            };
-          };
+          fallbackToPassword = true;
+          keyFile = "/secrets/luks.key";
+        }; 
+        crypted-2 = {
+          preLVM = true;
+          fallbackToPassword = true;
+          keyFile = "/secrets/luks.key";
         };
       };
     };

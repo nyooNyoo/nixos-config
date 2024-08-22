@@ -30,7 +30,6 @@
     uutils-coreutils-noprefix
     btrfs-progs
     cifs-utils
-    home-manager
     starship # having starship here means pkgs.startship will be stored during build and not during promptInit
   ];
 
@@ -41,10 +40,7 @@
   hardware.ledger.enable = true;
   i18n.defaultLocale = "en_US.UTF-8";
 
-  console = let
-    variant = "u24n";
-  in {
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-${variant}.psf.gz";
+  console = {
     earlySetup = true;
     keyMap = "us";
   };
@@ -58,9 +54,6 @@
   in {
     inherit extraConfig;
     user = {inherit extraConfig;};
-    # Systemd OOMd
-    # Fedora enables these options by default. See the 10-oomd-* files here:
-    # https://src.fedoraproject.org/rpms/systemd/tree/acb90c49c42276b06375a66c73673ac3510255
     oomd.enableRootSlice = true;
   };
 

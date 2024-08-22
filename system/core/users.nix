@@ -7,13 +7,11 @@
   };
   
   users = {
-    mutableUsers = false;
+    mutableUsers = true;
     users = {
-      root.hashedPasswordFile = "/persist/sercrets/root";
       nyoo = {
         isNormalUser = true;
         shell = pkgs.zsh;
-        hashedPasswordFile = "/persist/secrets/nyoo";
         extraGroups = [
           "wheel"
           "docker"
