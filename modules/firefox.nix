@@ -46,11 +46,7 @@
         # Valid strings for installation_mode are "allowed", "blocked",
         # "force_installed" and "normal_installed".
 
-        ExtensionSettings = with extensions; {
-          "*" = {
-            installation_mode = "blocked";
-            default_area = "menupanel";
-          };
+        ExtensionSettings =  {
         } // extensions;
   
         /* ---- PREFERENCES ---- */
