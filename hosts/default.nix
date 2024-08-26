@@ -4,13 +4,15 @@
   ...
 }: let
   inherit (self) inputs;
+  myLib = import ../myLib;
 
   core = ../system/core;
   bootloader = ../system/core/bootloader.nix;
   #impermanence = ../system/core/impermanence.nix;
   wayland = ../system/wayland;
   hw = inputs.nixos-hardware.nixosModules;
-  firefox = ../modules/firefox.nix;
+  firefox = ../modules/firefox;
+  social = ../modules/social;
 
 in {
   vessel = nixpkgs.lib.nixosSystem {
@@ -25,8 +27,9 @@ in {
         hw.dell-xps-15-9520-nvidia
         core
         firefox
+	social
       ];
-    specialArgs = {inherit inputs;};
+    specialArgs = {inherit inputs myLib;};
   };
 }
 

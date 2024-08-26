@@ -7,6 +7,8 @@
       ./disk-config.nix
     ];
   
+  #wayland.sway.enable = true;  
+
   hardware = {
     graphics.enable = true;
     

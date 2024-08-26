@@ -17,7 +17,6 @@
     firefox = {
       enable = true;
       languagePacks = [ "en-US" ];
-      package = pkgs.firefox-esr;
 
       /* ---- POLICIES ---- */
       # Check about:policies#documentation for options.

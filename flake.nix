@@ -17,7 +17,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-parts, ...} @ inputs:
+  outputs = { self, nixpkgs, flake-parts, ...} @ inputs: 
     flake-parts.lib.mkFlake {inherit inputs;} ({withSystem, ...}: {
       systems = [
         "x86_64-linux"

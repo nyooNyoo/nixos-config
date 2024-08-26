@@ -36,6 +36,7 @@
       glib-networking.enable = true;
       gnome-keyring.enable = true;
     };
+
     logind = {
       lidSwitch = "suspend";
       extraConfig = ''

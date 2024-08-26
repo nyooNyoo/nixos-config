@@ -2,12 +2,8 @@
   pkgs,
   lib,
   ...
-}: let
-  inherit (lib) mkDefault;
-in {
-  environment.systemPackages = [
-    pkgs.sbctl
-  ];
+}: 
+{
  
   boot = {
     tmp = {
@@ -15,7 +11,7 @@ in {
       useTmpfs = false;
     };
 
-    # Silent boot
+    # silent boot
     consoleLogLevel = 0;
     plymouth.enable = true; 
     
@@ -40,7 +36,7 @@ in {
       };
     };
     
-    # Bleeding edge linux :)
+    # bleeding edge linux :)
     kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "psmouse.synaptics_intertouch=1" # more consistent touchpad behavior
@@ -57,7 +53,7 @@ in {
     '';
 
     loader = {
-      systemd-boot.enable = mkDefault true;
+      systemd-boot.enable =  true;
       # spam space to get to boot menu
       timeout = 0;
     };
