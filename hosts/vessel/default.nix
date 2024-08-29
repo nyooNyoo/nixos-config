@@ -8,6 +8,11 @@
     ];
   
   #wayland.sway.enable = true;  
+  environment.systemPackages = with pkgs; 
+  [
+    R
+    rstudio
+  ];
 
   hardware = {
     graphics.enable = true;

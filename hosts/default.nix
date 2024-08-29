@@ -2,9 +2,9 @@
   nixpkgs,
   self,
   ...
-}: let
+} @ inputs: let
+  myLib = import ../myLib {inherit inputs;};
   inherit (self) inputs;
-  myLib = import ../myLib;
 
   core = ../system/core;
   bootloader = ../system/core/bootloader.nix;

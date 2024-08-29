@@ -2,9 +2,10 @@
   pkgs,
   inputs,
   myLib,
+  lib,
   ...
 }: let 
-  #wayland = (myLib.mkEnableFilesImport (myLib.dirsIn ./.) "wayland");
+  test = (myLib.dirsIn ./.);
 
   in { 
   imports = [
@@ -12,7 +13,7 @@
     ./services.nix
     ./pipewire.nix
     ./sway
-  ]; # ++ wayland; 
+  ] ++ test;  
 
   
 
