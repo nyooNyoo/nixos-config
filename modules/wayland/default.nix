@@ -3,9 +3,11 @@
   inputs,
   myLib,
   lib,
+  config,
   ...
 }: let 
-  test = (myLib.dirsIn ./.);
+  opt = "wayland";
+  waylandModules = (myLib.mkEnableFileImports (myLib.dirsIn ./.) opt);
 
   in { 
   imports = [
@@ -13,7 +15,7 @@
     ./services.nix
     ./pipewire.nix
     ./sway
-  ] ++ test;  
+  ];# ++ waylandModules;  
 
   
 

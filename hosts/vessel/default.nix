@@ -12,6 +12,12 @@
   [
     R
     rstudio
+    (python3.withPackages ( ps: with ps; [
+      dbus-python
+    ]))
+    unzip
+    openvpn
+    openvpn3
   ];
 
   hardware = {

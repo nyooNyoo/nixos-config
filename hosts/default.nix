@@ -1,25 +1,27 @@
 {
-  nixpkgs,
-  self,
+  withSystem,
+  inputs,
   ...
-} @ inputs: let
-  myLib = import ../myLib {inherit inputs;};
-  inherit (self) inputs;
+}: {
+  flake.nixosConfigurations = let
+    inherit (inputs.self) lib;
+    inherit (lib.builders) mkNixosSystem;
 
-  core = ../system/core;
-  bootloader = ../system/core/bootloader.nix;
-  #impermanence = ../system/core/impermanence.nix;
-  wayland = ../system/wayland;
-  hw = inputs.nixos-hardware.nixosModules;
-  firefox = ../modules/firefox;
-  social = ../modules/social;
+    hw = inputs.nixos-hardware.nixosModules;
 
-in {
-  vessel = nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = 
-      [
-        {networking.hostName = "vessel";}
+    core = ../modules/core;
+    bootloader = ../modules/core/bootloader.nix;
+    #impermanence = ../system/core/impermanence.nix;
+    wayland = ../modules/wayland;
+    firefox = ../modules/firefox;
+    social = ../modules/social;
+
+  in {
+    vessel = mkNixosSystem {
+      inherit withSystem;
+      hostname = "nyoo";
+      system = "x86_64-linux";
+      modules = [
         ./vessel
         wayland
         bootloader
@@ -29,7 +31,7 @@ in {
         firefox
 	social
       ];
-    specialArgs = {inherit inputs myLib;};
+    };
   };
 }
 

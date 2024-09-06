@@ -17,17 +17,17 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-parts, ...} @ inputs: 
-    flake-parts.lib.mkFlake {inherit inputs;} ({withSystem, ...}: {
+  outputs = inputs: 
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
         "x86_64-linux"
         "aarch64-linux"
       ];
 
-      flake = {
-        nixosConfigurations = import ./hosts inputs;
-      };
-   });
-
+      imports = [
+        ./hosts
+        ./parts
+      ];
+   };
 }
 

@@ -2,9 +2,7 @@
   pkgs,
   lib,
   ...
-}: 
-{
- 
+}: {
   boot = {
     tmp = {
       cleanOnBoot = true;
