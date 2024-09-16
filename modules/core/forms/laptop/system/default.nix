@@ -1,0 +1,8 @@
+{
+  ...
+}: {
+  imports = [
+    ./power
+    ./input
+  ];
+}

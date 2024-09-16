@@ -1,4 +1,7 @@
-{ lib, ... }: let
+{
+   lib,
+   ... 
+}: let
   inherit (builtins) map removeAttrs;
   inherit (lib) mkIf mkEnableOption;
 
@@ -6,12 +9,10 @@
   # if the option it creates is enabled somewhere.
   mkEnableModuleImport = path: opt: cfg: let
     file = (fileNameOf path);
-    func = import path {inherit perSystem._module.args;};
-    extra [ ({...}: {
-      options = {opt.${file}.enable = (mkEnableOption "${file}");};})
-    ];
+    func = import path {};
   in {
-    imports = (func.imports or []) ++ extra;
+    imports = (func.imports or []);
+    options = {opt.${file}.enable = (mkEnableOption "${file}");};
     config = (mkIf cfg.${file}.enable (func.config));
   };
 

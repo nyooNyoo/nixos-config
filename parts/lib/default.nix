@@ -10,18 +10,11 @@
       lib = self; 
     };
     in {
-      extendedLib = {
-        # Helpers for file and directory fetching 
-        files = callLibs ./files.nix;
-
-
-        # Module building, vital to the flake's organization
-        #modules = callLibs ./modules.nix;
-      };
       builders = callLibs ./builders.nix;
+      files = callLibs ./files.nix;
     
       # in case I want to be lazy later
-      #inherit (self.extendedLib.files) ....
+      #inherit (self.files) ....
     };
   
     # Merge all libraries from imports here
