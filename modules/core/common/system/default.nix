@@ -1,10 +1,11 @@
-{...}: {
+_: {
   imports = [
-    ./system.nix
-   # ./security.nix
-    ./network.nix
-    #./secrets.nix
-    ./nix.nix
-    ./users.nix
+    ./os
+    ./hardware
+    ./impermanence
+    ./encryption
+    ./nix
+    ./virtualization
+    ./security
   ];
 }

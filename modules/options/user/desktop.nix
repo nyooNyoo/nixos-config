@@ -8,8 +8,6 @@
   inherit (lib.types) bool enum;
 
   usr = config.modules.user;
-  cfg = config.modules.system;
-
 in {
   options.modules.user = {
     wm = mkOption {

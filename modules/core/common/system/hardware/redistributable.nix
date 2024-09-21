@@ -4,5 +4,5 @@
 }: let
   inherit (lib) mkDefault;
 in {
-  hardware,enableRedistributableFirmware = lib.mkDefault true;
+  hardware.enableRedistributableFirmware = lib.mkDefault true;
 }

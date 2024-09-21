@@ -85,7 +85,11 @@ in {
 
         open = mkDefault true;
         nvidiaSettings = false;
+	# Persistenced is only relevant for server systems to my understanding
+	# and has a negative impact on power consumption
         # nvidiaPersistenced = true;
+        
+        # Possible slow downs
         # forceFullCompositionPipeline = true;
     };
   
