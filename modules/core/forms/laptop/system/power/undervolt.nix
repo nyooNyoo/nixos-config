@@ -3,7 +3,7 @@
 }: {
   services = {
     undervolt = {
-      enable = mkDefault false;
+      enable = false;
       tempBat = 65;
     };
   };

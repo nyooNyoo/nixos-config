@@ -6,7 +6,7 @@
 }: let
   inherit (lib) mkIf;
 
-  cfg = config.modules.system.bluetooth;
+  cfg = config.modules.system.hardware.bluetooth;
 in {
   config = mkIf cfg.enable {
     # should not matter I think

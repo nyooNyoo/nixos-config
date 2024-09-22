@@ -1,11 +1,10 @@
 {
   imports = [
-    ./os
     ./hardware
-    ./impermanence
+    #./impermanence
     ./encryption
-    ./nix
-    ./virtualization
-    ./security
+    #./nix
+    #./virtualization
+    #./security
   ];
 }

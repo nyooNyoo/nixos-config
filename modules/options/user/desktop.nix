@@ -42,7 +42,7 @@ in {
 
     isWayland = mkOption {
       type = bool;
-      default = (usr.wm.sway.enable || usr.wm.hyprland.enable);
+      default = (usr.sway.enable || usr.hyprland.enable);
       readOnly = true;
       description = ''
         Whether to enable wayland only packages, environment variables,

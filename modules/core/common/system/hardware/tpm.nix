@@ -26,7 +26,7 @@ in {
       # Exports TCTI (TPM Command Transmission Interface) variables.
       # - 'TPM2TOOLS_TCTI'
       # - 'TPM2_PKCS11_TCTI;
-      tsctiEnvironment.enable = true;
+      tctiEnvironment.enable = true;
 
 
       # Cryptographic library + tooling

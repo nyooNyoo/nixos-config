@@ -2,7 +2,7 @@
   config,
   lib,
   ...
-}; let
+}: let
   inherit (lib.modules) mkIf;
   inherit (builtins) mapAttrs;
   

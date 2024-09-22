@@ -7,7 +7,7 @@
     mouse = {
       accelProfile = "flat";
       accelSpeed = "0";
-      middleEmualtion = false;
+      middleEmulation = false;
     };
 
     touchpad = {

@@ -32,7 +32,7 @@
 
   in {
     vessel = mkNixosSystem {
-      hostname = "nyoo";
+      hostname = "vessel";
       system = "x86_64-linux";
       modules = mkModules {
         forms = [ laptop ];

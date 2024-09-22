@@ -3,8 +3,12 @@
   pkgs,
   lib, 
   ...
-}: {
-  config = lib.mkIf config.modules.system.yubikeySupport.enable {
+}: let
+  inherit (lib.modules) mkIf;
+
+  cfg = config.modules.system.hardware.yubikeySupport;
+in {
+  config = mkIf cfg.enable {
     hardware.gpgSmartcards.enable = true;
 
     services = {
@@ -21,12 +25,12 @@
     };
     environment.systemPackages = [
       # Yubico's official tools
-      yubikey-manager # cli
-      yubikey-manager-qt # gui
-      yubikey-personalization # cli
-      yubikey-personalization-gui # gui
-      yubico-piv-tool # cli
-      yubioath-flutter # gui
+      pkgs.yubikey-manager # cli
+      pkgs.yubikey-manager-qt # gui
+      pkgs.yubikey-personalization # cli
+      pkgs.yubikey-personalization-gui # gui
+      pkgs.yubico-piv-tool # cli
+      pkgs.yubioath-flutter # gui
     ];
   };
 }

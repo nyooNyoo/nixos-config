@@ -1,8 +1,9 @@
 {
   config,
+  lib,
   ...
 }: let
-  inherit (lib.modules) mkIf
+  inherit (lib.modules) mkIf;
   
   cfg = config.modules.system.hardware.sound;
 in {

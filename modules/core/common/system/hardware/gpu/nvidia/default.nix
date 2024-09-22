@@ -20,7 +20,7 @@
 
     isHybrid = elem "hybrid-nvidia" gpu.type;
 in {
-  config = mkIf (any (type: elem type [ "nvidia" "hybrid-nvidia" ]) gpu.type) {
+  config = mkIf (gpu.type != null && any (type: elem type [ "nvidia" "hybrid-nvidia" ]) gpu.type) {
     nixpkgs.config.allowUnfree = true;
 
     services.xserver = mkMerge [
@@ -28,7 +28,7 @@ in {
         videoDrivers = [ "nvidia" ];
       }
 
-      (mkIf (!cfg.isWayland) {
+      (mkIf (!usr.isWayland) {
         # disable DPMS - Display Power Managment Signaling
         monitorSection = ''
           Option "DPMS" "false"
@@ -71,7 +71,7 @@ in {
     hardware = {
       nvidia = {
         package = mkDefault nvidiaPackage;
-        modesettings.enable = mkDefault true;
+        modesetting.enable = mkDefault true;
        
         prime.offload = {
           enable = isHybrid;
@@ -91,11 +91,12 @@ in {
         
         # Possible slow downs
         # forceFullCompositionPipeline = true;
-    };
+      };
   
-    graphics = {
-      extraPackages = [ pkgs.nvidia-vaapi-driver ];
-      extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
+      graphics = {
+        extraPackages = [ pkgs.nvidia-vaapi-driver ];
+        extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
+      };
     };
   };
 }

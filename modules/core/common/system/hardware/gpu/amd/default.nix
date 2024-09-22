@@ -13,7 +13,7 @@
   
   gpu = config.modules.system.hardware.gpu;
 in {
-  config = mkIf (any (type: elem type [ "amd" "hybrid-amd" ]) gpu.type) {
+  config = mkIf (gpu.type != null && any (type: elem type [ "amd" "hybrid-amd" ]) gpu.type) {
     services.xserver.videoDrivers = mkDefault [ "modesetting" "amdgpu" ];
 
     boot = {
@@ -21,7 +21,7 @@ in {
       kernelModules = [ "amdgpu" ];
     };
  
-    environment.systemPackages = [ plgs.nvtopPackages.amd ];
+    environment.systemPackages = [ pkgs.nvtopPackages.amd ];
 
     hardware.graphics = {
       extraPackages = [

@@ -12,7 +12,7 @@ in {
 
     cpu = {
       type = mkOption {
-        type nullOr (enum [ "pi" "intel" "amd" ]);
+        type = nullOr (enum [ "pi" "intel" "amd" ]);
         default = null;
         description = ''
           The vendor/architecture of the CPU. Always specifiy as it enables needed drivers
@@ -23,7 +23,7 @@ in {
 
     gpu = {
       type = mkOption {
-        type nullOr (listOf (enum [ "pi" "amd" "intel" "nvidia" "hybrid-nvidia" "hybrid-amd" ]));
+        type = nullOr (listOf (enum [ "pi" "amd" "intel" "nvidia" "hybrid-nvidia" "hybrid-amd" ]));
         default = null;
         description = ''
           The vendor/architecture of the GPU. Determines what drivers and/or modules
@@ -32,7 +32,8 @@ in {
         '';
       };
       enable = mkEnableOption "Graphics" // {
-        default = cfg.gpu != null};
+        default = (cfg.gpu != null);
+      };
     };
 
     bluetooth = {

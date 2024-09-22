@@ -1,7 +1,8 @@
-_: {
+{
   imports = [
     ./desktop.nix
-    ./users.nix
-    ./programs
-    ./services 
+    #./users.nix
+    #./programs
+    #./services 
   ];
+}

@@ -39,11 +39,12 @@
       # turn off gpu when not in use
       powerManagement.enable = true;
       powerManagement.finegrained = true;
-
-      # `nvidia-settings`
-      nvidiaSettings = true;
     };
   };
+
+  modules.system.hardware.gpu.type = [ "intel" "hybrid-nvidia" ];
+
+  system.stateVersion = "24.05";
 
 }
 

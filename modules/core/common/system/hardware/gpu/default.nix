@@ -5,8 +5,9 @@
   ...
 }: let
   inherit (lib.modules) mkIf;
+
   gpu = config.modules.system.hardware.gpu;
-{
+in {
   imports = [
     ./intel
     ./nvidia
@@ -20,8 +21,8 @@
     };
 
     environment.systemPackages = [
-      glxinfo
-      glmark2
+      pkgs.glxinfo
+      pkgs.glmark2
     ];
   };
 }

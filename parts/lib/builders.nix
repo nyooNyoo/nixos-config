@@ -9,8 +9,6 @@
   inherit (lib.lists) singleton concatLists;
   inherit (lib.modules) mkDefault;
   inherit (lib.attrsets) recursiveUpdate;
-  
-  modulePath = ../../modules;
 
   mkNixosSystem = {
     system,
@@ -37,7 +35,7 @@
             flake.source = nixpkgs.outPath;
           };
         })
-        (singleton ./${args.hostname})
+        (singleton "${inputs.self.outPath}/hosts/${args.hostname}")
         (args.modules)
       ];
     });

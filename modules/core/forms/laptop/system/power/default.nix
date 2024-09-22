@@ -21,7 +21,7 @@ in {
 
   boot = {
     kernelModules = [ "acpi_call" ];
-    kernelPackages = [ "intel_pstate=disabled" ]; # reccomended for auto-cpufreq
+    kernelParams = [ "intel_pstate=disabled" ]; # reccomended for auto-cpufreq
     extraModulePackages = with config.boot.kernelPackages; [
       acpi_call
       cpupower
