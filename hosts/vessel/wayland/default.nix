@@ -1,13 +1,10 @@
 {
   pkgs,
   inputs,
-  myLib,
   lib,
   config,
   ...
 }: let 
-  opt = "wayland";
-  waylandModules = (myLib.mkEnableFileImports (myLib.dirsIn ./.) opt);
 
   in { 
   imports = [
@@ -15,7 +12,7 @@
     ./services.nix
     ./pipewire.nix
     ./sway
-  ];# ++ waylandModules;  
+  ];  
 
   
 

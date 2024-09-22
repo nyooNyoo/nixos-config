@@ -1,39 +1,37 @@
 {
-  withSystem,
   inputs,
   ...
 }: {
   flake.nixosConfigurations = let
     inherit (inputs.self) lib;
     inherit (lib.builders) mkNixosSystem;
+    inherit (lib.lists) concatLists flatten;
 
     hw = inputs.nixos-hardware.nixosModules;
-    
-    modulePath = ../modules;
 
+    modulePath = ../modules;
     coreModules = modulePath + /core;
 
     extras = modulePath + /extra;
     options = modulePath + /options;
     common = coreModules + /common;
-    
-    #forms#
+
     laptop = coreModules + /forms/laptop;
 
     mkModules = {
-      moduleTrees ? [ common extras options ],
       forms ? [],
       extraModules ? [],
     } @ args:
       flatten ( 
         concatLists [
-          concatLists [ modulesTrees forms ]
+          [ common options ]
+          args.forms
           args.extraModules
         ]
       );
+
   in {
     vessel = mkNixosSystem {
-      inherit withSystem;
       hostname = "nyoo";
       system = "x86_64-linux";
       modules = mkModules {

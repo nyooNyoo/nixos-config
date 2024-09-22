@@ -5,6 +5,16 @@
     [ 
       ./hardware-configuration.nix
       ./disk-config.nix
+
+      # temp testing migration files
+      ./bootloader.nix
+      ./network.nix
+      ./security.nix
+      ./users.nix
+      ./system.nix
+     
+      ./wayland
+      ./firefox
     ];
   
   #wayland.sway.enable = true;  

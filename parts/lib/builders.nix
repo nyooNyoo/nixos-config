@@ -1,5 +1,6 @@
 {
   inputs,
+  withSystem,
   lib,
   ...
 }: let
@@ -12,9 +13,9 @@
   modulePath = ../../modules;
 
   mkNixosSystem = {
-    withSystem,
     system,
     hostname,
+    modules ? [],
     ...
   } @ args:
     withSystem system ({
@@ -36,8 +37,8 @@
             flake.source = nixpkgs.outPath;
           };
         })
-        (singleton ./${args.hostname}))
-        (args.modules or [])
+        (singleton ./${args.hostname})
+        (args.modules)
       ];
     });
 

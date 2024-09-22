@@ -1,4 +1,8 @@
-{ inputs, ...}: let
+{ 
+  inputs,
+  withSystem,
+   ...
+}: let
   inherit (inputs.nixpkgs) lib;
   
   # This lib is made in the same fashion as nixpkgs.lib
@@ -10,7 +14,7 @@
       lib = self; 
     };
     in {
-      builders = callLibs ./builders.nix;
+      builders = callLibs ./builders.nix {inherit withSystem};
       files = callLibs ./files.nix;
     
       # in case I want to be lazy later

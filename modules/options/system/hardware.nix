@@ -36,7 +36,11 @@ in {
     };
 
     bluetooth = {
-      enable = mkEnableOption "bluetooth";
+      enable = mkEnableOption "Bluetooth";
+    };
+
+    yubikeySupport = {
+      enable = mkEnableOption "Yubikey device support";
     };
 
     sound = {

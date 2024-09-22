@@ -1,4 +1,4 @@
-_: {
+{
   imports = [
     ./os
     ./hardware
