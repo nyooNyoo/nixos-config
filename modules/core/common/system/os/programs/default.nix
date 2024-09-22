@@ -1,6 +1,5 @@
 {
   imports = [
-  ./boot
-  ./programs
+    ./git.nix
   ];
 }

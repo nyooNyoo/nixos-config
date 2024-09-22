@@ -10,7 +10,6 @@
     };
 
     # silent boot
-    consoleLogLevel = 0;
     plymouth.enable = true; 
     
     initrd = {
@@ -35,7 +34,6 @@
     };
     
     # bleeding edge linux :)
-    kernelPackages = pkgs.linuxPackages_latest;
     kernelParams = [
       "psmouse.synaptics_intertouch=1" # more consistent touchpad behavior
       "quiet"

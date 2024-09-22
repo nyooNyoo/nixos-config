@@ -5,17 +5,17 @@
   ...
 }: let
   inherit (lib.modules) mkIf;
-  inherit (lib.lists) singleton;
+  inherit (lib.lists) optionals singleton;
 
   cfg = config.modules.system.boot.plymouth;
 in {
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable) {
     boot.plymouth = {
       enable = true;
 
       # I think this can be cleaned up
-      themePackages = mkIf (cfg.themePackage != null) singleton cfg.themePackage;
-      inherit cfg.theme;
+      themePackages = optionals (cfg.themePackage != null) (singleton cfg.themePackage);
+      inherit (cfg) theme;
     };
 
     powerManagement = {

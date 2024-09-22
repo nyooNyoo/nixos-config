@@ -1,6 +1,7 @@
 {
   imports = [
     ./hardware
+    ./os
     #./impermanence
     ./encryption
     #./nix

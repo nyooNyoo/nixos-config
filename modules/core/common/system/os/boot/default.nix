@@ -72,7 +72,7 @@ in {
 
       "logo.nologo"
     ] ++
-    (optionals cfg.silentBoot [
+    (optionals cfg.silentBoot.enable [
       "quiet"
       # Only show errors or worse.
       "loglevel=3"
@@ -82,6 +82,6 @@ in {
       # disable systemd messages
       "systemd.show_status=false"
       "rd.systemd.show_status=false"
-    ];
+    ]);
   };
 }
