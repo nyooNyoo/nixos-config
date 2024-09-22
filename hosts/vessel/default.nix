@@ -42,9 +42,40 @@
     };
   };
 
-  modules.system.hardware.gpu.type = [ "intel" "hybrid-nvidia" ];
+  modules = {
+    system = {
+      hardware = {
+        cpu.type = "intel";
+        gpu.type = [ "intel" "hybrid-nvidia" ];
+
+        bluetooth.enable = true;
+        yubikeySupport.enable = true;
+        sound.enable = true;
+      };
+
+      boot = {
+        plymouth.enable = true;
+        silentBoot.enable = true;
+      };
+
+      encryption = {
+        enable = true;
+ 
+        devices.crypted-1.keyFile = "/secrets/luks.key";
+        devices.crypted-2.keyFile = "/secrets/luks.key";
+      };
+    };
+    
+    user = {
+      wm = "sway";
+      mainUser = "nyoo";
+    };
+  };
+  
+  boot.initrd.secrets = {
+    "/secrets/luks.key" = "/persist/secrets/luks.key";
+  };
 
   system.stateVersion = "24.05";
-
 }
 

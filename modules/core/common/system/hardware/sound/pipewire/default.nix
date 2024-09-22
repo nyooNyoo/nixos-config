@@ -25,7 +25,7 @@ in {
     security.rtkit.enable = true;
 
     systemd.user.services = {
-      pipewire.wantedBy = [ "default.taget" ];
+      pipewire.wantedBy = [ "default.target" ];
       pipewire-pulse.wantedBy = ["default.target"];
     };
   }; 

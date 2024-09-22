@@ -1,7 +1,7 @@
 {
   imports = [
     ./desktop.nix
-    #./users.nix
+    ./users.nix
     #./programs
     #./services 
   ];

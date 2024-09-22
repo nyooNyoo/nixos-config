@@ -44,7 +44,6 @@
     };
   };
 
-  programs.ssh.startAgent = true;
   security = {
     protectKernelImage = false;
     lockKernelModules = false;

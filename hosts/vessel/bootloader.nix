@@ -46,7 +46,6 @@
       "boot.shell_on_fail"
     ];
     extraModprobeConfig = ''
-      options i915 enable_guc=2
       options iwlwifi power_save=1 disable_11ax=1
     '';
 

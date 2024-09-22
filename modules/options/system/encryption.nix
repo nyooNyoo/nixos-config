@@ -4,10 +4,12 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkOption types mkIf;
+
+  cfg = config.modules.system.encryption;
 in {
-  config = mkIf config.modules.system.encryption.enable {
+  config = mkIf cfg.enable {
     warnings =
-      if config.modules.system.encryption.device == { }
+      if config.modules.system.encryption.devices == { }
       then [
         ''
           LUKS encryption is enabled without any devices set, decryption may not work.

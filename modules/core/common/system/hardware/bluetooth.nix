@@ -21,8 +21,8 @@ in {
       # contained in the SIM card of another Bluetooth device'.
       disabledPlugins = ["sap"];
 
-      # Headset Profile and Hands-free Profile
-      hsphfpd.enable = true;
+      # Included in wireplumber
+      hsphfpd.enable = !config.services.pipewire.wireplumber.enable;
 
       settings = {
         General = {
