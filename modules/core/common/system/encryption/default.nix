@@ -13,7 +13,7 @@ in {
       # faster disk encryption
       initrd.availableKernelModules = [
         "aesni_intel"
-        "cryptid"
+        "cryptd"
         "usb_storage"
       ];
 
