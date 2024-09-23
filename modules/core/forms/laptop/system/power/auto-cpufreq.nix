@@ -27,5 +27,7 @@ in {
         };
       };
     };
+
+    tlp.enable = false;
   };
 }
