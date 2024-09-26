@@ -10,14 +10,15 @@
   cfg = config.modules.system.boot;
 in {
   imports = [
-    #./loaders
+    ./loaders
 
     ./plymouth.nix
-    #./secure-boot.nix
+    ./secure-boot.nix
   ];
 
   config.boot = {
     consoleLogLevel = 3;
+    # Enable for raid support
     swraid.enable = mkDefault false;
 
     loader = {
@@ -28,13 +29,27 @@ in {
     };
 
     tmp = {
-      # If true, uses ram instead of disk space
-      useTmpfs = mkDefault false;
+      # Uses ram instead of disk space
+      useTmpfs = mkDefault true;
       cleanOnBoot = (!config.boot.tmp.useTmpfs);
     };
 
     initrd = {
       verbose = false;
+
+      systemd = {
+        # needed to support tpm decryption
+        enable = true;
+
+        # some emergency tooling
+        storePaths = with pkgs; [ util-linux cryptsetup sbctl ];
+        extraBin = {
+          sbctl = "${pkgs.sbctl}/bin/sbctl";
+          fdisk = "${pkgs.util-linux}/bin/fdisk";
+          lsblk = "${pkgs.util-linux}/bin/lsblk";
+          cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
+        };
+      };
 
       kernelModules = [
         "btrfs"
@@ -71,6 +86,8 @@ in {
       "vt.global_cursor_default=0"
 
       "logo.nologo"
+
+      "boot.shell_on_fail"
     ] ++
     (optionals cfg.silentBoot.enable [
       "quiet"

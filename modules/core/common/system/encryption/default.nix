@@ -35,7 +35,8 @@ in {
         # handle LUKS decryption before LVM
         preLVM = true;
 
-        fallbackToPassword = true;
+        # Implied by systemd initrd
+        #fallbackToPassword = true;
       }) 
     cfg.devices;
   };

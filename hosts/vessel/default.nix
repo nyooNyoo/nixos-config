@@ -28,6 +28,8 @@
     unzip
     openvpn
     openvpn3
+    winetricks
+    wineWowPackages.waylandFull
   ];
 
   hardware = {
@@ -41,6 +43,8 @@
       powerManagement.finegrained = true;
     };
   };
+
+  services.fwupd.enable = true;
 
   modules = {
     system = {
@@ -75,6 +79,8 @@
   boot.initrd.secrets = {
     "/secrets/luks.key" = "/persist/secrets/luks.key";
   };
+
+  
 
   system.stateVersion = "24.05";
 }

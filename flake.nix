@@ -3,16 +3,34 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
-    nixos-hardware.url = "github:nixos/nixos-hardware";
-    impermanence.url = "github:nix-community/impermanence";
+    
+    # Preconfigured configs for specific devices
+    # most useful for the pci information.
+    nixos-hardware = {
+      url = "github:nixos/nixos-hardware";
+    };
+   
+    # Self-explanatory.
+    impermanence = {
+      url = "github:nix-community/impermanence";
+    };
 
+    # Make flakes work with system.
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+
+    # Declaratively define disk partitions.
+    # Handy for reinstalls especially with encrypted drives.
     disko = {
       url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Secure boot for NixOS.
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

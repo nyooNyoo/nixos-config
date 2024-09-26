@@ -5,12 +5,26 @@
   ...
 }: let
   inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.types) nullOr str package;
+  inherit (lib.types) nullOr str package enum;
 
 in {
   options.modules.system.boot = {
+
+    secureBoot = {
+      enable = mkEnableOption "Secure boot.";
+    };
+
     silentBoot = {
       enable = mkEnableOption "Silent boot.";
+    };
+
+    loader = mkOption {
+      type = enum [ "grub" "systemd-boot" ];
+      default = "systemd-boot";
+      description = ''
+        Which bootloader to use for the device, in general
+        you should use systemd-boot for UEFI and grub for legacy boot.
+      '';
     };
 
     plymouth = {
@@ -21,7 +35,7 @@ in {
         default = null;
         description = ''
           Loads a package in which a theme is contained in.
-          Not a list because you should only have one :).
+          You only need one, not a list.
         '';
       };
 
