@@ -1,0 +1,7 @@
+{
+  imports = [
+    ./sway
+    ./hyprland
+    ./river
+  ];
+}

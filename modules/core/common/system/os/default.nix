@@ -1,6 +1,7 @@
 {
   imports = [
   ./boot
+  ./display
   ./programs
   ];
 }
