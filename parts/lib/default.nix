@@ -4,37 +4,30 @@
    ...
 }: let
   inherit (inputs.nixpkgs) lib;
-  
-  # This lib is made in the same fashion as nixpkgs.lib
-  # shoutouts to NotAShelf for their demonstration on
-  # how to override lib without conflicts
-  myLib = self: let
-    callLibs = file: 
-      import file { 
-        inherit withSystem; # ok for now
+
+  lib' = lib.extend (final: prev: let
+    callLibs = module:
+      import module {
+        inherit withSystem;
         inherit inputs;
-        lib = self; 
-        };
-    in {
-      builders = callLibs ./builders.nix;
-      files = callLibs ./files.nix;
-    
-      # in case I want to be lazy later
-      #inherit (self.files) ....
-    };
+        lib = final;
+      };
+  in lib.recursiveUpdate prev {
+    files = callLibs ./files.nix;
+    builders = callLibs ./builders.nix;
+    lists = callLibs ./lists.nix;
+  });
+
+in {
+  perSystem._module.args.lib = lib';
+  flake.lib = lib';
+}    
   
     # Merge all libraries from imports here
-    extensions = lib.composeManyExtensions [
-      (_: _: inputs.nixpkgs.lib)
-      (_: _: inputs.flake-parts.lib)
-    ];
+    #extensions = lib.composeManyExtensions [
+    #  (_: _: inputs.nixpkgs.lib)
+    #  (_: _: inputs.flake-parts.lib)
+    #];
 
-    extendedLib = (lib.makeExtensible myLib).extend extensions;
-  in {
-    # Overwrites the 'lib' argument from flake-parts so that it's easily
-    # accesible inside 'inputs'.
-    perSystem._module.args.lib = extendedLib;
+    #extendedLib = (lib.makeExtensible myLib).extend extensions;
 
-    # exposes the library to self.lib.
-    flake.lib = extendedLib; 
-}
