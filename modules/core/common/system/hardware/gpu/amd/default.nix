@@ -4,16 +4,12 @@
   pkgs,
   ...
 }: let
-  # Warning: I do not have a system that uses a amd gpu yet
-  # there is no guarentee these are good defaults so use
-  # at your own risk.
-
-  inherit (builtins) elem any;
-  inherit (lib) mkIf mkDefault;
+  inherit (lib.modules) mkIf mkDefault;
+  inherit (lib.lists) mutuallyInclusive;
   
   gpu = config.modules.system.hardware.gpu;
 in {
-  config = mkIf (gpu.type != null && any (type: elem type [ "amd" "hybrid-amd" ]) gpu.type) {
+  config = mkIf (mutuallyInclusive [ "amd" "hybrid-amd" ] gpu.type) {
     services.xserver.videoDrivers = mkDefault [ "modesetting" "amdgpu" ];
 
     boot = {
@@ -21,24 +17,24 @@ in {
       kernelModules = [ "amdgpu" ];
     };
  
-    environment.systemPackages = [ pkgs.nvtopPackages.amd ];
+    environment.systemPackages = with pkgs; [ nvtopPackages.amd ];
 
     hardware.graphics = {
-      extraPackages = [
-        pkgs.amdvlk
+      extraPackages = with pkgs; [
+        amdvlk
         
-        pkgs.mesa
+        mesa
  
-        pkgs.vulkan-tools
-        pkgs.vulkan-loader
-        pkgs.vulkan-validation-layers
-        pkgs.vulkan-extension-layer
+        vulkan-tools
+        vulkan-loader
+        vulkan-validation-layers
+        vulkan-extension-layer
 
-        pkgs.rocmPackages.clr
-        pkgs.rocmPackaes.clr.icd
+        rocmPackages.clr
+        rocmPackaes.clr.icd
       ];
 
-      extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
+      extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
     };
   };
 }

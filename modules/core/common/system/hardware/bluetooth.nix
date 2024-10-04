@@ -9,7 +9,6 @@
   cfg = config.modules.system.hardware.bluetooth;
 in {
   config = mkIf cfg.enable {
-    # should not matter I think
     boot.kernelParams = ["btusb"];
 
     hardware.bluetooth = {

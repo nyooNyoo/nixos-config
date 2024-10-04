@@ -23,14 +23,14 @@ in {
         enableSSHSupport = true;
       };
     };
-    environment.systemPackages = [
+    environment.systemPackages = with pkgs; [
       # Yubico's official tools
-      pkgs.yubikey-manager # cli
-      pkgs.yubikey-manager-qt # gui
-      pkgs.yubikey-personalization # cli
-      pkgs.yubikey-personalization-gui # gui
-      pkgs.yubico-piv-tool # cli
-      pkgs.yubioath-flutter # gui
+      yubikey-manager # cli
+      yubikey-manager-qt # gui
+      yubikey-personalization # cli
+      yubikey-personalization-gui # gui
+      yubico-piv-tool # cli
+      yubioath-flutter # gui
     ];
   };
 }

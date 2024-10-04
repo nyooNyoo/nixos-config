@@ -4,8 +4,9 @@
   lib,
   ...
 }: let
-  inherit (builtins) elem any;
-  inherit (lib) mkIf mkDefault mkMerge versionOlder;
+  inherit (lib.modules) mkIf mkDefault mkMerge;
+  inherit (lib.strings) versionOlder;
+  inherit (lib.lists) elem mutuallyInclusive;
 
   nvStable = config.boot.kernelPackages.nvidiaPackages.stable;
   nvBeta = config.boot.kernelPackages.nvidiaPackages.beta;
@@ -20,7 +21,7 @@
 
     isHybrid = elem "hybrid-nvidia" gpu.type;
 in {
-  config = mkIf (gpu.type != null && any (type: elem type [ "nvidia" "hybrid-nvidia" ]) gpu.type) {
+  config = mkIf (mutuallyInclusive [ "nvidia" "hybrid-nvidia" ] gpu.type) {
     nixpkgs.config.allowUnfree = true;
 
     services.xserver = mkMerge [
@@ -54,18 +55,18 @@ in {
           WLR_NO_HARDWARE_CURSORS = "1";
         })
       ];
-      systemPackages = [
-        pkgs.nvtopPackages.nvidia
+      systemPackages = with pkgs; [
+        nvtopPackages.nvidia
 
-        pkgs.mesa
+        mesa
 
-        pkgs.vulkan-tools
-        pkgs.vulkan-loader
-        pkgs.vulkan-validation-layers
-        pkgs.vulkan-extension-layer
+        vulkan-tools
+        vulkan-loader
+        vulkan-validation-layers
+        vulkan-extension-layer
 
-        pkgs.libva
-        pkgs.libva-utils
+        libva
+        libva-utils
       ];
     };
     hardware = {
@@ -94,8 +95,8 @@ in {
       };
   
       graphics = {
-        extraPackages = [ pkgs.nvidia-vaapi-driver ];
-        extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
+        extraPackages = with pkgs; [ nvidia-vaapi-driver ];
+        extraPackages32 = with pkgs; [ pkgsi686Linux.nvidia-vaapi-driver ];
       };
     };
   };

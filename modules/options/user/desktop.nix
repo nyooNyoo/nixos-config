@@ -6,12 +6,13 @@
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
   inherit (lib.types) bool enum;
+  inherit (lib.lists) elem;
 
   usr = config.modules.user;
 in {
   options.modules.user = {
     wm = mkOption {
-      type = enum [ "none" "hyprland" "sway" "i3" ];
+      type = enum [ "none" "hyprland" "sway" "river" ];
       default = "none";
       description = ''
         The desktop environment to be used.
@@ -19,30 +20,20 @@ in {
     };
 
     hyprland = {
-      enable = mkEnableOption "Hyprland" // 
-        {default = usr.wm == "hyprland";};
-      
       package = mkPackageOption pkgs "hyprland" {};
     };
 
     sway = {
-      enable = mkEnableOption "sway" //
-        {default = usr.wm == "sway";};
-
       package = mkPackageOption pkgs "sway" {};
     };
 
-    i3 = {
-      enable = mkEnableOption "i3" //
-        {default = usr.wm == "i3";};
-
-      package = mkPackageOption pkgs "i3" {};
+    river = {
+      package = mkPackageOption pkgs "river" {};
     };
-
 
     isWayland = mkOption {
       type = bool;
-      default = (usr.sway.enable || usr.hyprland.enable);
+      default = (elem usr.wm [ "hyprland" "sway" "river" ]);
       readOnly = true;
       description = ''
         Whether to enable wayland only packages, environment variables,

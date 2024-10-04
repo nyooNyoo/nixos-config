@@ -33,10 +33,10 @@ in {
       pkcs11.enable = true;
     };
 
-    environment.systemPackages = [
-      pkgs.tpm2-tools
-      pkgs.tmp2-tss
-      pkgs.tmp2-abrd
+    environment.systemPackages = with pkgs; [
+      tpm2-tools
+      tmp2-tss
+      tmp2-abrd
     ];
   };
 }

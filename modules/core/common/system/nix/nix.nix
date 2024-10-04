@@ -1,78 +1,79 @@
 {
   config,
   pkgs,
-  cfg,
   lib,
-  inputs,
-  inputs',
   ...
-}: {
-  environment = {
-    # set channels (backwards compatibility)
-    sessionVariables.FLAKE = "/home/nyoo/nixos-config";
-    etc = {
-      "nix/flake-channels/nixpkgs".source = inputs.nixpkgs;
-    };
+}: let
+  inherit (lib.lists) singleton;
 
-    systemPackages = with pkgs; [
-      git
-      deadnix
-      alejandra
-      statix
-      nix-output-monitor
-    ];
-    defaultPackages = [];
-  };
-
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-
-      overlays = [
-        (self: super: {
-          networkd-dispatcher = super.networkd-dispatcher.overrideAttrs (oldAttrs: {
-            nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [pkgs.wrapGAppsNoGuiHook];
-          });
-        })
-      ];
-    };
-  };
-
-  # faster rebuilding
-  documentation = {
-    enable = true;
-    doc.enable = false;
-    man.enable = true;
-    dev.enable = false;
-  };
-
+in {
   nix = {
-    gc.automatic = lib.mkDefault false;
-    package = pkgs.nixVersions.git;
+    # Not to get political or anything lol
+    package = pkgs.lix;
 
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
-    # Free up to 1GiB whenever there is less than 100MiB left.
-    extraOptions = ''
-      experimental-features = nix-command flakes recursive-nix
-      keep-outputs = true
-      warn-dirty = false
-      keep-derivations = true
-      min-free = ${toString (100 * 1024 * 1024)}
-      max-free = ${toString (1024 * 1024 * 1024)}
-    '';
+    # Garbage Collector
+    gc = {
+      automatic = true;
+      # In case of disaster I'd rather deal with it on the weekend.
+      dates = "Sun";
+      # TODO Find a way to keep latest 10 Generations 
+      options = "--delete-older-than 30d";
+    };
+
+    # Store Optimizer
+    optimise = {
+      automatic = true;
+      # Tuesday, Thursday, Saturday
+      dates = singleton "Tue,Thu,Sat"   
+    };
+
     settings = {
-      flake-registry = "/etc/nix/registry.json";
+      # https://nix.dev/manual/nix/2.18/command-ref/conf-file.html
+
       auto-optimise-store = true;
-      builders-use-substitutes = true;
-      allowed-users = ["@wheel"];
-      trusted-users = ["@wheel"];
+
+      # Restarts download after 30 seconds of no contact.
+      stalled-download-timeout = 30;
+
+      # The curl connection timeout, let us know if we have no internet.
+      connect-timeout = 10;
+
+      allowed-users = ["root" "@wheel"];
+      trusted-users = ["root" "@wheel"];
+
+      # Free 5GB when less than 1GB is left.
+      min-free = ${toString (1 * 1024 * 1024 * 1024)};
+      max-free = ${toString (5 * 1024 * 1024 * 1024)};
+
+      # Isolate builds, stop if something prevents that.
       sandbox = true;
+      sandbox-fallback = false;
+
       max-jobs = "auto";
+
+      # Gives some extra lines to the tail of log
       log-lines = 20;
-      extra-experimental-features = ["flakes" "nix-command" "recursive-nix" "ca-derivations"];
+
+      extra-experimental-features = [
+        "flakes"
+        "nix-command"
+        "recursive-nix"
+        "ca-derivations"
+        "no-url-literals"
+      ];
+      
+      # Complete declaritive purity.
+      pure-eval = true;
+
+      # I hate this default
+      warn-dirty = false;
+
+      # Alert if a third party is changing the config. 
+      accept-flake-config = false;
 
       substituters = [
         "https://cache.nixos.org"
@@ -87,5 +88,4 @@
       ];
     };
   };
-  system.stateVersion = "24.05"; 
 }
