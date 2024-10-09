@@ -4,7 +4,7 @@
     ./os
     #./impermanence
     ./encryption
-    #./nix
+    ./nix
     #./virtualization
     #./security
   ];

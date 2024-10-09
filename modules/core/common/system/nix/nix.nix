@@ -5,15 +5,16 @@
   ...
 }: let
   inherit (lib.lists) singleton;
+  inherit (lib.attrsets) mapAttrsToList;
 
 in {
   nix = {
     # Not to get political or anything lol
     package = pkgs.lix;
 
-    # This will additionally add your inputs to the system's legacy channels
-    # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+    daemonCPUSchedPolicy = "idle";
+    daemonIOSchedClass = "idle";
+    daemonIOSchedPriority = 7;
 
     # Garbage Collector
     gc = {
@@ -28,7 +29,7 @@ in {
     optimise = {
       automatic = true;
       # Tuesday, Thursday, Saturday
-      dates = singleton "Tue,Thu,Sat"   
+      dates = singleton "Tue,Thu,Sat";
     };
 
     settings = {
@@ -46,8 +47,8 @@ in {
       trusted-users = ["root" "@wheel"];
 
       # Free 5GB when less than 1GB is left.
-      min-free = ${toString (1 * 1024 * 1024 * 1024)};
-      max-free = ${toString (5 * 1024 * 1024 * 1024)};
+      min-free = "${toString (1 * 1024 * 1024 * 1024)}";
+      max-free = "${toString (5 * 1024 * 1024 * 1024)}";
 
       # Isolate builds, stop if something prevents that.
       sandbox = true;
