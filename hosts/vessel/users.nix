@@ -7,7 +7,6 @@
   };
   
   users = {
-    mutableUsers = true;
     users = {
       nyoo = {
         isNormalUser = true;

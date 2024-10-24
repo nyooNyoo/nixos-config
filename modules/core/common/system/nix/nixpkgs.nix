@@ -9,6 +9,6 @@
     allowUnfree = true;
 
     # Speed up of most package builds
-    enableParallelBuildingByDefault = true;
+    enableParallelBuildingByDefault = false;
   };
 }

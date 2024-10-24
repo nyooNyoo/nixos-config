@@ -3,5 +3,6 @@
   ./boot
   ./display
   ./programs
+  ./users
   ];
 }

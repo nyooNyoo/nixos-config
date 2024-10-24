@@ -14,7 +14,7 @@
       allowNoPasswordLogin = false;
       enforceIdUniqueness = true;
 
-      #mutableUsers = false;
+      mutableUsers = false;
     };
   };
 }

@@ -54,7 +54,8 @@ in {
       sandbox = true;
       sandbox-fallback = false;
 
-      max-jobs = "auto";
+      max-jobs = 7;
+      cores = 4;
 
       # Gives some extra lines to the tail of log
       log-lines = 20;
