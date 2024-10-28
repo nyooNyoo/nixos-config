@@ -12,5 +12,6 @@ in {
     ./hardware.nix
     ./boot.nix
     ./filesystem.nix
+    ./networking.nix
   ];
 }

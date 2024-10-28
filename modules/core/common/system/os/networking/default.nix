@@ -10,7 +10,7 @@ in {
     #./firewall
     
     #./network-manager.nix
-    #./ssh.nix
+    ./ssh.nix
   ];
 
   # Helpful networking tools

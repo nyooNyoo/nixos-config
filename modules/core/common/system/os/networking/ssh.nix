@@ -51,5 +51,12 @@ in {
         MaxAuthTries = 5;
       };
     };
+
+    endlessh = {
+      enable = !cfg.tarpit;
+      port = 22;
+      openFirewall = true;
+      extraOptions = [ "-v" "-s" ];
+    };
   };
 }
