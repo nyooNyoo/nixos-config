@@ -8,7 +8,6 @@
 
       # temp testing migration files
       ./bootloader.nix
-      ./network.nix
       ./security.nix
       ./users.nix
       ./system.nix
@@ -74,6 +73,14 @@
  
         devices.crypted-1.keyFile = "/secrets/luks.key";
         devices.crypted-2.keyFile = "/secrets/luks.key";
+      };
+
+      filesystem = {
+        enabledFilesystems =
+        [
+          "vfat"
+          "btrfs"
+        ];
       };
     };
     

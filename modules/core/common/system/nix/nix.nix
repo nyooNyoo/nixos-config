@@ -69,7 +69,7 @@ in {
       ];
       
       # Complete declaritive purity.
-      pure-eval = true;
+      #pure-eval = true;
 
       # I hate this default
       warn-dirty = false;

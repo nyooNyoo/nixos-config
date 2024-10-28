@@ -4,5 +4,8 @@
   ./display
   ./programs
   ./users
+  ./networking
+
+  ./filesystem.nix
   ];
 }
