@@ -19,11 +19,6 @@
     zsh.promptInit = ''eval "$(${pkgs.starship}/bin/starship init zsh)"'';
   };
 
-  environment.variables = {
-    EDITOR = "vim";
-    BROWSER = "firefox";
-  };
-
   environment.systemPackages = with pkgs; [
     vim
     git

@@ -18,7 +18,7 @@ in {
 
     # Garbage Collector
     gc = {
-      automatic = true;
+      automatic = false;
       # In case of disaster I'd rather deal with it on the weekend.
       dates = "Sun";
       # TODO Find a way to keep latest 10 Generations 

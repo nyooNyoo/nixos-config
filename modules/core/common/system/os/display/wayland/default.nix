@@ -2,9 +2,9 @@
   imports = [
     ./wm
 
+
+    ./services.nix
     ./environment.nix
     ./xdg-portals.nix
   ];
-
-  services.seatd.enable = true;
 }

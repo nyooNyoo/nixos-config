@@ -60,6 +60,12 @@
       boot = {
         plymouth.enable = true;
         silentBoot.enable = true;
+        greeter = {
+          autologin = {
+            enable = true;
+            user = "nyoo";
+          };
+        };
       };
 
       encryption = {

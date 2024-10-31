@@ -5,6 +5,7 @@
   ./programs
   ./users
   ./networking
+  ./environment
 
   ./filesystem.nix
   ];

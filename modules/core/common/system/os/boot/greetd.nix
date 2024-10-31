@@ -23,7 +23,7 @@ in {
             (getExe pkgs.greetd.tuigreet)
             "--time"
             "--remember"
-            "--asterisks-char -"
+            "--asterisks-char \"-\""
             "--cmd ${cfg.command}"
           ];
         };

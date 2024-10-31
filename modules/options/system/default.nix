@@ -7,10 +7,11 @@
 
 in {
   imports = [
+    ./nix.nix
+    ./boot.nix
+    ./hardware.nix
     # options for systems with encrypted disks
     ./encryption.nix
-    ./hardware.nix
-    ./boot.nix
     ./filesystem.nix
     ./networking.nix
   ];
