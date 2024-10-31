@@ -7,7 +7,7 @@
   inherit (lib.modules) mkIf mkForce;
 in {
   imports = [
-    #./firewall
+    ./firewall
     
     #./network-manager.nix
     ./ssh.nix
@@ -47,12 +47,6 @@ in {
         macAddress = "random";
         powersave = true;
       };
-    };
-
-    firewall = {
-      enable = true;
-      allowPing = false;
-      logReversePathDrops = true;
     };
   };
 

@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (lib.modules) mkDefault mkForce mkOveride mkIf;
-  inherit (lib.lists) optionals;
+  inherit (lib.lists) optionals optional;
 
   cfg = config.modules.system.boot;
 in {
@@ -14,6 +14,7 @@ in {
 
     ./plymouth.nix
     ./secure-boot.nix
+    ./greetd.nix
   ];
 
   config.boot = {

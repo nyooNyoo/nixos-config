@@ -6,6 +6,10 @@
 }: let
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.types) nullOr str package enum;
+  inherit (lib.attrsets) attrNames attrHead;
+  inherit (lib.meta) getExe;
+
+  usr = config.modules.user;
 
 in {
   options.modules.system.boot = {
@@ -16,6 +20,26 @@ in {
 
     silentBoot = {
       enable = mkEnableOption "Silent boot.";
+    };
+
+    greeter = {
+      command = mkOption {
+        type = str;
+        default = 
+          if usr.wm == {} 
+          then "${getExe config.users.defaultUserShell}"
+          else "${getExe (attrHead usr.wm).package}";
+      };
+      autologin = {
+        enable = mkEnableOption "Autologin to main user.";
+        user = mkOption {
+          type = enum (attrNames config.users.users);
+          default = config.modules.user.mainUser;
+          description = ''
+            Determines which user is automatically logged in.
+          '';
+        };
+      };
     };
 
     loader = mkOption {

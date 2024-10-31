@@ -8,7 +8,7 @@
 
   usr = config.modules.user;
 in {
-  config = mkIf (usr.wm == "hyprland") {
+  config = mkIf (usr.wm.hyprland.enabled or false) {
     # TODO
   };
 }

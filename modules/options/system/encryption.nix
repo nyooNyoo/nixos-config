@@ -3,7 +3,9 @@
   lib,
   ...
 }: let
-  inherit (lib) mkEnableOption mkOption types mkIf;
+  inherit (lib.modules) mkIf;
+  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib.types) str nullOr attrsOf submodule;
 
   cfg = config.modules.system.encryption;
 in {
@@ -23,20 +25,20 @@ in {
 
     devices = mkOption {
       default = { };
-      type = with types; attrsOf (submodule (
-        { config, name, ...}: { 
+      type = attrsOf (submodule (
+        {config, name, ...}: { 
           options = {
 
             name = mkOption {
               visible = false;
               default = name;
-              type = types.str;
+              type = str;
               description = "Name of the unencrypted device";
             };
 
             keyFile = mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = nullOr str;
               description = ''
                 The name of the file that should
                 be used as the decryption key for the encrpyed device.

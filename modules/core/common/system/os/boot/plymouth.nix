@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (lib.modules) mkIf;
-  inherit (lib.lists) optionals singleton;
+  inherit (lib.lists) optional;
 
   cfg = config.modules.system.boot.plymouth;
 in {
@@ -13,8 +13,7 @@ in {
     boot.plymouth = {
       enable = true;
 
-      # I think this can be cleaned up
-      themePackages = optionals (cfg.themePackage != null) (singleton cfg.themePackage);
+      themePackages = optional (cfg.themePackage != null) cfg.themePackage;
       inherit (cfg) theme;
     };
 

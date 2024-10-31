@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  inherit (lib.modules) mkIf;
+  inherit (lib.modules) mkIf mkDefault;
 
   usr = config.modules.user;
   cfg = config.modules.system.hardware;
@@ -24,7 +24,7 @@ in {
       config = {
         common = let
         portal = 
-          if usr.wm == "hyperland"
+          if usr.wm.hyprland.enabled or false
           then "hyprland"
           else "wlr";
         in {
@@ -43,13 +43,13 @@ in {
             max_fps = 30;
             chooser_type = "simple";
             
-            chooser_cmd = 
-              if usr.wm == "sway"
+            chooser_cmd = mkDefault
+              (if usr.wm.sway.enabled or false
               then ''${pkgs.sway}/bin/swaymsg -t get_tree |\
                 ${pkgs.jq}/bin/jq '.. | select(.pid? and .visible?) | .rect | \"\\(.x),\\(.y) \\(.width)x\\(.height)"' |\
                 ${pkgs.slurp}/bin/slurp''
               # TODO add other wm specific ways to select windows
-              else "${pkgs.slurp}/bin/slurp -orf %o";
+              else "${pkgs.slurp}/bin/slurp -orf %o");
           };
         };
       };

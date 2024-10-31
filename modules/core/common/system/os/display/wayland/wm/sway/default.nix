@@ -10,7 +10,7 @@
   usr = config.modules.user;
   cfg = config.modules.system.hardware;
 in {
-  config = mkIf (usr.wm == "sway") {
+  config = mkIf (usr.wm.sway.enabled or false) {
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true;

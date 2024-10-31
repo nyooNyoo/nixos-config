@@ -6,17 +6,6 @@
 }: {
   services = {
     mullvad-vpn.enable = true;
-    greetd = {
-      enable = true;
-      settings = rec {
-        initial_session = {
-          command = "sway";
-          user = "nyoo";
-        };
-        default_session = initial_session;
-        terminal.vt = 1;
-      };
-    };
 
     gnome = {
       glib-networking.enable = true;

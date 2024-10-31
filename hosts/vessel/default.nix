@@ -46,12 +46,6 @@
   services.fwupd.enable = true;
   services.printing.enable = true;
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-
   modules = {
     system = {
       hardware = {
@@ -85,7 +79,11 @@
     };
     
     user = {
-      wm = "sway";
+      wm = {
+        sway = {
+          enable = true;
+        };
+      };
       mainUser = "nyoo";
     };
   };
@@ -93,8 +91,6 @@
   boot.initrd.secrets = {
     "/secrets/luks.key" = "/persist/secrets/luks.key";
   };
-
-  
 
   system.stateVersion = "24.05";
 }
