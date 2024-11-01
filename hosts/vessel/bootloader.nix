@@ -23,10 +23,6 @@
       };
     };
     
-    # bleeding edge linux :)
-    kernelParams = [
-      "splash"
-    ];
     extraModprobeConfig = ''
       options iwlwifi power_save=1 disable_11ax=1
     '';

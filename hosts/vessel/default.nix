@@ -9,7 +9,6 @@
       # temp testing migration files
       ./bootloader.nix
       ./security.nix
-      ./users.nix
       ./system.nix
      
       ./wayland

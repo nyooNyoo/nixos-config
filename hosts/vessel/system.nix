@@ -28,13 +28,6 @@
     starship # having starship here means pkgs.startship will be stored during build and not during promptInit
   ];
 
-  time = {
-    timeZone = "America/New_York";
-    hardwareClockInLocalTime = true;
-  };
-  hardware.ledger.enable = true;
-  i18n.defaultLocale = "en_US.UTF-8";
-
   console = {
     earlySetup = true;
     keyMap = "us";

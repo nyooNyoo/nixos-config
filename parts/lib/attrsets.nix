@@ -2,12 +2,13 @@
   lib,
   ...
 }: let
-  inherit (lib.attrsets) attrNames getAttr;
-  inherit (lib.lists) head;
+  inherit (lib.attrsets) attrNames mapAttrsToList getAttr;
+  inherit (lib.lists) head elem;
 
   attrHead = x: getAttr (head (attrNames x)) x;
-  hasEnabledAttr = s: x: x.s.enabled or false;
+  # Inefficient but fine for now
+  attrAny = pred: x: elem true (mapAttrsToList (_: pred) x);
 in {
   inherit attrHead;
-  inherit hasEnabledAttr;
+  inherit attrAny;
 }
