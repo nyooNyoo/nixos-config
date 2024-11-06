@@ -52,7 +52,7 @@
         gpu.type = [ "intel" "hybrid-nvidia" ];
 
         bluetooth.enable = true;
-        yubikeySupport.enable = true;
+        yubikeySupport.enable = false;
         sound.enable = true;
       };
 
@@ -90,6 +90,12 @@
         };
       };
       mainUser = "nyoo";
+
+      programs = {
+        nvim = {
+          enable = true;
+        };
+      };
     };
   };
   

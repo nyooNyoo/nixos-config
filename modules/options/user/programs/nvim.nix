@@ -7,7 +7,7 @@
   inherit (lib.types) listOf nullOr path package;
 
 in {
-  options.modules.user.programs.neovim = {
+  options.modules.user.programs.nvim = {
     enable = mkEnableOption "Neovim text editor"; 
 
     viAlias = mkEnableOption "Neovim symlink over vi" // {default = true;};

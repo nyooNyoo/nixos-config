@@ -12,7 +12,7 @@ in {
     enable = mkDefault config.users.defaultUserShell == pkgs.zsh ||
       attrAny (x: x.shell == pkgs.zsh) config.users.users;
 
-    promptInit = ''eval "$(${pkgs.starship}/bin/starship init zsh)"}'';
+    promptInit = ''eval "$(${pkgs.starship}/bin/starship init zsh)"'';
     enableCompletion = true;
   };
 }
