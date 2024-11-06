@@ -21,14 +21,13 @@
     mkModules = {
       forms ? [],
       extraModules ? [],
-    } @ args:
-      flatten ( 
-        concatLists [
-          [ common options ]
-          args.forms
-          args.extraModules
-        ]
-      );
+    }: flatten ( 
+      concatLists [
+       [ common options ]
+        forms
+        extraModules
+      ]
+    );
 
   in {
     vessel = mkNixosSystem {

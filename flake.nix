@@ -21,6 +21,12 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    # Tree formatter for flake-parts.
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Declaratively define disk partitions.
     # Handy for reinstalls especially with encrypted drives.
     disko = {
