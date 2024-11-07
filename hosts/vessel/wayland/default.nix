@@ -12,9 +12,6 @@ in {
     ./pipewire.nix
   ];  
 
-  
-  modules.user.wm.sway.package = config.programs.sway.package;
-
   environment = {
     variables = {
       NIXOS_OZONE_WL = "1";

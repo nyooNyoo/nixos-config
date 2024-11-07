@@ -10,6 +10,7 @@
   inherit (lib.lists) mutuallyInclusive filter length;
   inherit (lib.attrsets) attrNames;
   inherit (lib.trivial) throwIf;
+  inherit (lib.strings) concatStringsSep;
 
   usr = config.modules.user;
 in {
@@ -26,9 +27,13 @@ in {
 	    basePackage = mkPackageOption pkgs name {};
             package = mkPackageOption pkgs name {} // {
 	      default = usr.wm.${name}.basePackage;
-	      apply = p: throwIf (length (filter (x: x ? ${name}.package) options.modules.user.wm.definitions) > 2)) ''
-	        Do not set modules.user.wm.${name}.package directly. This option
-		should only be set and accessed internally for wrapper purposes.
+	      apply = p: let 
+	        defs = filter (x: x.value ? ${name}.package) options.modules.user.wm.definitionsWithLocations;
+	      in throwIf (length defs > 1) ''
+The option 'modules.user.wm.${name}.package' is defined outside of internal wrapper.
+
+Definitions values:
+${concatStringsSep "\n" (map (x: "- In " + x.file) defs)}
 	      '' p;
 	    };
             enable = mkEnableOption "${name} window manager." // {default = true;};
