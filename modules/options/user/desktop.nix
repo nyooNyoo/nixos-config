@@ -6,11 +6,9 @@
   ...
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
-  inherit (lib.types) bool str path attrsOf submodule;
-  inherit (lib.lists) mutuallyInclusive filter length;
+  inherit (lib.types) bool str attrsOf submodule;
+  inherit (lib.lists) mutuallyInclusive;
   inherit (lib.attrsets) attrNames;
-  inherit (lib.trivial) throwIf;
-  inherit (lib.strings) concatStringsSep;
 
   usr = config.modules.user;
 in {
@@ -20,21 +18,9 @@ in {
       type = attrsOf (submodule (
         {name, ...}: {
           options = {
-	    # Because wrappers work however they want this is the only solution
-	    # I could come up with to solve my delema of needing both a generalized
-	    # option for packages to be wrapped as well as needing a generalized reference
-	    # to the wrapped package.
-	    basePackage = mkPackageOption pkgs name {};
+	    # Inherit the wrapper from most wm definitions (at least wayland ones).
             package = mkPackageOption pkgs name {} // {
-	      default = usr.wm.${name}.basePackage;
-	      apply = p: let 
-	        defs = filter (x: x.value ? ${name}.package) options.modules.user.wm.definitionsWithLocations;
-	      in throwIf (length defs > 1) ''
-The option 'modules.user.wm.${name}.package' is defined outside of internal wrapper.
-
-Definitions values:
-${concatStringsSep "\n" (map (x: "- In " + x.file) defs)}
-	      '' p;
+	      apply = options.programs.${name}.package.apply or (p: p);
 	    };
             enable = mkEnableOption "${name} window manager." // {default = true;};
 	    configFile = mkOption {
