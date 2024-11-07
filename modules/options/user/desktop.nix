@@ -6,7 +6,7 @@
   ...
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
-  inherit (lib.types) bool str attrsOf submodule;
+  inherit (lib.types) bool str path attrsOf submodule;
   inherit (lib.lists) mutuallyInclusive filter length;
   inherit (lib.attrsets) attrNames;
   inherit (lib.trivial) throwIf;
@@ -37,6 +37,12 @@ ${concatStringsSep "\n" (map (x: "- In " + x.file) defs)}
 	      '' p;
 	    };
             enable = mkEnableOption "${name} window manager." // {default = true;};
+	    configFile = mkOption {
+	      type = path;
+	      description = ''
+	        Points to config file for the window manager if supported by the wrapper.
+	      '';
+	    };
           };
         }
       ));

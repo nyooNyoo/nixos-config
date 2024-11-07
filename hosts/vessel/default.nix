@@ -10,7 +10,6 @@
       ./security.nix
       ./system.nix
      
-      ./wayland
       ./firefox
     ];
   
@@ -91,7 +90,6 @@
       wm = {
         sway = {
           enable = true;
-          package = pkgs.sway;
         };
       };
       mainUser = "nyoo";

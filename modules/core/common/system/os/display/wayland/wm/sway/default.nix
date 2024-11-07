@@ -31,7 +31,18 @@ in {
     modules.user.wm.sway.package = config.programs.sway.package;
 
     environment = {
-      systemPackages = with pkgs; [ swaylock swayidle foot dmenu wmenu ];
+      systemPackages = with pkgs; [ 
+        swaylock 
+	swayidle 
+	foot 
+	dmenu 
+	wmenu 
+	brightnessctl
+	wl-clipboard
+	grim
+	slurp
+	mako
+      ];
     };
   };
 }
