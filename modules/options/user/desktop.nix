@@ -1,4 +1,5 @@
 {
+  options,
   config,
   pkgs,
   lib,
@@ -6,8 +7,9 @@
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
   inherit (lib.types) bool str attrsOf submodule;
-  inherit (lib.lists) mutuallyInclusive length;
+  inherit (lib.lists) mutuallyInclusive filter length;
   inherit (lib.attrsets) attrNames;
+  inherit (lib.trivial) throwIf;
 
   usr = config.modules.user;
 in {
@@ -17,9 +19,18 @@ in {
       type = attrsOf (submodule (
         {name, ...}: {
           options = {
-            # Prioritize package set in config.programs.$name.package for
-            # cases like sway which expose wrapper options this way (saves myself from duplicate options)
-            package = mkPackageOption pkgs name {} // {default = config.programs."${name}".package or name;};
+	    # Because wrappers work however they want this is the only solution
+	    # I could come up with to solve my delema of needing both a generalized
+	    # option for packages to be wrapped as well as needing a generalized reference
+	    # to the wrapped package.
+	    basePackage = mkPackageOption pkgs name {};
+            package = mkPackageOption pkgs name {} // {
+	      default = usr.wm.${name}.basePackage;
+	      apply = p: throwIf (length (filter (x: x ? ${name}.package) options.modules.user.wm.definitions) > 2)) ''
+	        Do not set modules.user.wm.${name}.package directly. This option
+		should only be set and accessed internally for wrapper purposes.
+	      '' p;
+	    };
             enable = mkEnableOption "${name} window manager." // {default = true;};
           };
         }

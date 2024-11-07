@@ -4,17 +4,17 @@
   lib,
   ...
 }: let
-  inherit (lib.modules) mkIf;
+  inherit (lib.modules) mkIf mkForce;
   inherit (lib.lists) mutuallyInclusive optional;
 
   usr = config.modules.user;
   cfg = config.modules.system.hardware;
 in {
-  config = mkIf (usr.wm.sway.enabled or false) {
+  config = mkIf (true) {
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
-      package = usr.sway.package;
+      package = usr.wm.sway.basePackage;
 
       extraOptions = [ "--config" "${./config}" ]
         ++ optional (mutuallyInclusive [ "nvidia" "hybrid-nvidia" ] cfg.gpu.type) "--unsupported-gpu";
@@ -23,6 +23,15 @@ in {
         export XDG_SESSION_DESKTOP=sway
         export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
       '';
+
+      extraPackages = mkForce [];
+    };
+
+    # Update the package to the wrapped version
+    modules.user.wm.sway.package = config.programs.sway.package;
+
+    environment = {
+      systemPackages = with pkgs; [ swaylock swayidle foot dmenu wmenu ];
     };
   };
 }

@@ -1,12 +1,14 @@
 {
   imports = [
-  ./boot
-  ./display
-  ./programs
-  ./users
-  ./networking
-  ./environment
+    ./boot
+    ./users
+    ./display
+    ./programs
+    ./networking
+    ./environment
 
-  ./filesystem.nix
+    ./fonts.nix
+    ./console.nix
+    ./filesystem.nix
   ];
 }

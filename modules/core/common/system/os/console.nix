@@ -5,12 +5,13 @@
   ...
 }: let
   inherit (lib.modules) mkDefault;
+
 in {
   console = let
-    format = "8x16b"
+    format = "8x16b";
   in {
     enable = true;
-    earlySetup = false;
+    earlySetup = true;
 
     keyMap = mkDefault "us";
 

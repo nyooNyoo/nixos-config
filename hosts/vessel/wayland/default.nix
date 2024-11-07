@@ -6,15 +6,14 @@
   ...
 }: let 
 
-  in { 
+in { 
   imports = [
-    ./fonts.nix
     ./services.nix
     ./pipewire.nix
-    ./sway
   ];  
 
   
+  modules.user.wm.sway.package = config.programs.sway.package;
 
   environment = {
     variables = {

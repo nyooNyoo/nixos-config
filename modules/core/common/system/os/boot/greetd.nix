@@ -11,7 +11,7 @@
   cfg = config.modules.system.boot.greeter;
   usr = config.modules.user;
 in {
-  config = mkIf config.hardware.graphics.enable {
+  config = {
     services.greetd = {
       enable = true;
       

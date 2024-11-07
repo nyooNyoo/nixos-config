@@ -7,7 +7,6 @@
       ./disk-config.nix
 
       # temp testing migration files
-      ./bootloader.nix
       ./security.nix
       ./system.nix
      
@@ -40,6 +39,11 @@
       powerManagement.enable = true;
       powerManagement.finegrained = true;
     };
+  };
+  boot = {
+    extraModprobeConfig = ''
+      options iwlwifi power_save=1 disable_11ax=1
+    '';
   };
 
   services.fwupd.enable = true;
@@ -87,6 +91,7 @@
       wm = {
         sway = {
           enable = true;
+          package = pkgs.sway;
         };
       };
       mainUser = "nyoo";
