@@ -1,6 +1,0 @@
-{
-  imports = [
-    ./grub
-    ./systemd-boot
-  ];
-}

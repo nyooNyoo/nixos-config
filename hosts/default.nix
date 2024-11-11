@@ -9,14 +9,18 @@
 
     hw = inputs.nixos-hardware.nixosModules;
 
+    # NixOS modules here
     modulePath = ../modules;
-    coreModules = modulePath + /core;
 
-    extras = modulePath + /extra;
-    options = modulePath + /options;
-    common = coreModules + /common;
+    # Defines sane defaults
+    defaults = modulePath + /core;
 
-    laptop = coreModules + /forms/laptop;
+    # Option definitions and wrappers
+    system = modulePath + /system;
+    common = defaults + /common;
+
+    # Specification defaults for specific archetypes
+    laptop = defaults + /forms/laptop;
 
     mkModules = {
       forms ? [],

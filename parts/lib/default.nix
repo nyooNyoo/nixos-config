@@ -30,7 +30,10 @@
     # Helper functions for attrsets
     attrsets = callLibs ./attrsets.nix;
 
-    # Nixpkgs style inherits, I don't like these
+    # More helper functions...
+    modules = callLibs ./modules.nix
+
+    # Nixpkgs style inherits; I don't like these
     #inherit (files) filesIn dirsIn fileNameOf;
   });
 

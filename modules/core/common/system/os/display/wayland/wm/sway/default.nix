@@ -5,20 +5,20 @@
   ...
 }: let
   inherit (lib.modules) mkIf mkForce;
-  inherit (lib.lists) mutuallyInclusive optional;
+  inherit (lib.lists) mutuallyInclusive optional optionals;
   inherit (lib.attrsets) optionalAttrs;
 
-  usr = config.modules.user;
+  usr = config.modules.user.wm.sway or {};
   cfg = config.modules.system.hardware;
 in {
-  config = mkIf (usr.wm.sway.enable or false) {
+  config = mkIf (usr.enable or false) {
     programs.sway = {
 
       wrapperFeatures.gtk = true;
-      package = usr.wm.sway.basePackage;
 
-      extraOptions = [ "--config" "${./config}" ]
-        ++ optional (mutuallyInclusive [ "nvidia" "hybrid-nvidia" ] cfg.gpu.type) "--unsupported-gpu";
+      extraOptions = []
+        ++ optional (mutuallyInclusive [ "nvidia" "hybrid-nvidia" ] cfg.gpu.type) "--unsupported-gpu"
+	++ optionals (usr ? configFile) [ "--config" "${usr.configFile}"]
 
       extraSessionCommands = ''
         export XDG_SESSION_DESKTOP=sway

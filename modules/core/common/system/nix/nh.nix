@@ -1,16 +1,13 @@
-{ 
-  config, 
-  ...
-}: let
+{lib, ...}: let
+  inherit (lib.modules) mkDefault;
 
-  cfg = config.modules.system.nix;
 in {
   programs.nh = {
-    enable = true;
+    enable = mkDefault true;
     clean = {
-      inherit (cfg.gc) enable;
-      extraArgs = "--keep-since 5d --keep ${cfg.gc.keep}";
-      inherit (cfg.gc) dates;
+      enable = mkDefault true;
+      extraArgs = mkDefault "--keep-since 5d --keep 5";
+      dates = mkDefault "Sun";
     };
   };
 }

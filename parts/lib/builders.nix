@@ -10,6 +10,7 @@
   inherit (lib.modules) mkDefault;
   inherit (lib.attrsets) recursiveUpdate;
 
+  # TODO clean this.
   mkNixosSystem = {
     system,
     hostname,
@@ -23,8 +24,7 @@
     }:
       nixosSystem {
         specialArgs = recursiveUpdate {
-          inherit lib;
-          inherit inputs self inputs' self';
+          inherit lib inputs self inputs' self' hostname;
         } (args.specialArgs or {});
 
       modules = concatLists [
