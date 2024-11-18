@@ -16,7 +16,10 @@ in {
     ./nh.nix
   ];
 
-  nix = {
+  nix = let
+    GB = x: "${x * 1024 * 1024 * 1024}"
+
+  in {
     # Not to get political or anything 
     package = mkDefault pkgs.lix;
 
@@ -28,7 +31,7 @@ in {
     optimise = {
       automatic = mkDefault true;
       # Tuesday, Thursday, Saturday
-      dates = mkDefault (["Tue,Thu,Sat"]);
+      dates = mkDefault ["Tue,Thu,Sat"];
     };
 
     settings = {
@@ -46,8 +49,8 @@ in {
       trusted-users = ["root" "@wheel"];
 
       # Free 5GB when less than 1GB is left.
-      min-free = mkDefault "${toString (1 * 1024 * 1024 * 1024)}";
-      max-free = mkDefault "${toString (5 * 1024 * 1024 * 1024)}";
+      min-free = mkDefault (GB 1);
+      max-free = mkDefault (GB 5);
 
       # Isolate builds, stop if something prevents that.
       sandbox = mkDefault true;

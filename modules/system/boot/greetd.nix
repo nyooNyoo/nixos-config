@@ -11,7 +11,7 @@
   inherit (lib.meta) getExe;
 
   cfg = config.modules.system.boot.greetd;
-  usr = config.modules.user;
+  wm = config.modules.system.display.wm.default;
 in {
   options.modules.system.boot.greetd = {
     enable = mkEnableOption "greetd.";
@@ -23,9 +23,9 @@ in {
     command = mkOption {
       type = str;
       default = 
-        if usr.wm == {}
+        if wm == null
 	then "${getExe config.users.defaultUserShell}"
-	else "${getExe (attrHead usr.wm).package}";
+	else "${getExe wm}";
       description = ''
         Command executed by the greeter upon login / autologin.
       '';

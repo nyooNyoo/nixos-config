@@ -29,10 +29,10 @@ in {
   };
 
   config = let
-    isIntel = elem "intel" cfg.type;
-    isAmd = mutuallyInclusive ["amd" "hybrid-amd"] cfg.type;
     isNvidia = mutuallyInclusive ["nvidia" "hybrid-nvidia"] cfg.type;
     isHybrid = mutuallyInclusive ["hybrid-nvidia" "hybrid-amd"] cfg.type;
+    isIntel = elem "intel" cfg.type;
+    isAmd = mutuallyInclusive ["amd" "hybrid-amd"] cfg.type;
 
   in mkIf cfg.enable (mkMerge [{
     hardware.graphics = {
@@ -56,84 +56,83 @@ in {
     ];
    }
 
-   (mkIf isIntel {
-     hardware.graphics = {
-       extraPackages = with pkgs; [
-         intel-media-driver
-         intel-compute-runtime
-         vpl-gpu-rt
-         libvdau-va-gl
-       ];
+    (mkIf isIntel {
+      hardware.graphics = {
+        extraPackages = with pkgs; [
+          intel-media-driver
+          intel-compute-runtime
+          vpl-gpu-rt
+          libvdau-va-gl
+        ];
 
-       extraPackages32 = with pkgs; [ intel-media-driver-32 ];
+        extraPackages32 = with pkgs; [ intel-media-driver-32 ];
        
-     boot = {
-       # TODO benchmark xe driver 
-       kernelModules = ["i915"];
-       initrd.kernelModules = ["i915"];
-     };
+      boot = {
+        # TODO benchmark xe driver 
+        kernelModules = ["i915"];
+        initrd.kernelModules = ["i915"];
+      };
 
-     services.xserver.videoDrivers = ["modesetting"];
+      services.xserver.videoDrivers = ["modesetting"];
 
-     environment.variables = mkIf isHybrid {
-       VDPAU_DRIVER = "va_gl";
-     };
-   })
+      environment.variables = mkIf isHybrid {
+        VDPAU_DRIVER = "va_gl";
+      };
+    })
 
-   (mkIf isAmd {
-     hardware.graphics = {
-       extraPackages = with pkgs; [ amdvlk rocmPackages.clr.icd ];
-       extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
-     };
+    (mkIf isNvidia (let
+      nvStable = config.boot.kernelPackages.nvidiaPackages.stable;
+      nvBeta = config.boot.kernelPackages.nvidiaPackages.beta;
 
-     boot = {
-       kernelModules = ["amdgpu"];
-       initrd.kernelModules = ["amdgpu"];
-     };
+      nvidiaPackage = if (versionOlder nvStable.version nvBeta.version)
+        then nvBeta
+        else nvStable;
 
-     services.xserver.videoDrivers = ["modesettings" "amdgpu"];
+    in {
+      hardware = {
+        nvidia = {
+          package = mkDefault nvidiaPackage
+	  modesettings.enable = mkDefault true;
 
-   })
+	  prime.offload = {
+	    enable = mkDefault isHybrid;
+	    enableOffloadCmd = mkDefault isHybrid;
+	  };
 
-   (mkIf isNvidia (let
-     nvStable = config.boot.kernelPackages.nvidiaPackages.stable;
-     nvBeta = config.boot.kernelPackages.nvidiaPackages.beta;
+	  powerManagement = {
+	    enable = mkDefault true;
+	    finegrained = mkDefault isHybrid;
+	  };
 
-     nvidiaPackage = if (versionOlder nvStable.version nvBeta.version)
-       then nvBeta
-       else nvStable;
+ 	  open = mkDefault true;
+	  nvidiaSettings = false;
+        };
 
-   in {
-     hardware = {
-       nvidia = {
-         package = mkDefault nvidiaPackage
-	 modesettings.enable = mkDefault true;
+        graphics = {
+          extraPackages = with pkgs; [ nvidia-vaapi-driver ];
+	  extraPackages32 = with pkgs; [ pkgs1686Linux.nvidia-vaapi-driver ];
+        };
+      };
 
-	 prime.offload = {
-	   enable = mkDefault isHybrid;
-	   enableOffloadCmd = mkDefault isHybrid;
-	 };
+      boot.blacklistedKernelModules = ["nouveau"];
 
-	 powerManagement = {
-	   enable = mkDefault true;
-	   finegrained = mkDefault isHybrid;
-	 };
+      services.xserver.videoDrivers = ["nvidia"];
 
-	 open = mkDefault true;
-	 nvidiaSettings = false;
-       };
+      environment.sessionVariables.LIBVA_DRIVER_NAME = "nvidia";
+    }))
 
-       graphics = {
-         extraPackages = with pkgs; [ nvidia-vaapi-driver ];
-	 extraPackages32 = with pkgs; [ pkgs1686Linux.nvidia-vaapi-driver ];
-       };
-     };
+    (mkIf isAmd {
+      hardware.graphics = {
+        extraPackages = with pkgs; [ amdvlk rocmPackages.clr.icd ];
+        extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+      };
 
-     boot.blacklistedKernelModules = ["nouveau"];
+      boot = {
+        kernelModules = ["amdgpu"];
+        initrd.kernelModules = ["amdgpu"];
+      };
 
-     services.xserver.videoDrivers = ["nvidia"];
-
-     environment.sessionVariables.LIBVA_DRIVER_NAME = "nvidia";
-   }))
+      services.xserver.videoDrivers = ["modesettings" "amdgpu"];
+    })
   ]);
 }

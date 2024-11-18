@@ -37,12 +37,10 @@ in {
     ];
 
     # Allows some shorthand to access hosts
-    search = [
-      "nyoo.dev."
-    ];
+    search = ["nyoo.dev."];
     networkmanager = {
       enable = true;
-      unmanaged = ["docker0" "rndis0"];
+      unmanaged = ["docker0"];
       wifi = {
         macAddress = "random";
         powersave = true;

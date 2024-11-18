@@ -7,10 +7,12 @@
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
   inherit (lib.modules) mkIf mkMerge mkDefault mkDefaultAttr mkOptionDefault;
-  inherit (lib.types) bool str attrsOf submodule;
-  inherit (lib.attrsets) attrNames mapAttrsToList;
-  inherit (lib.lists) mutuallyInclusive optional;
+  inherit (lib.types) nullOr bool package;
+  inherit (lib.attrsets) attrNames filterAttrs headAttrs;
+  inherit (lib.lists) mutuallyInclusive optional length;
   inherit (lib.meta) getExe;
+
+  enabledWms = attrNames (filterAttrs (_: v: (v.enable or false && v ? package)) cfg.wm);
 
   cfg = config.modules.system.display;
 in {
@@ -20,26 +22,14 @@ in {
   ];
 
   options.modules.system.display = {
-    wm = mkOption {
-      default = {};
-      type = attrsOf (submodule (
-        {name, ...}: {
-          options = {
-	    # Inherit the wrapper from most wm definitions (at least wayland ones).
-            package = mkPackageOption pkgs name {} // {
-	      apply = options.programs.${name}.package.apply or (p: p);
-	    };
-            enable = mkEnableOption "${name} window manager." // {default = true;};
-	    configFile = mkOption {
-	      type = path;
-	      default = ./wms/${name}/config
-	      description = ''
-	        Points to config file for the window manager if supported by the wrapper.
-	      '';
-	    };
-          };
-        }
-      ));
+    wm.default = mkOption {
+      type = nullOr package;
+      default = if (length enabledWms == 0)
+        then null
+	else cfg.wm.${head enabledWms}.package;
+      description = ''
+        Determines some default behaviors such as what to boot with.
+      '';
     };
 
     isWayland = mkOption {
@@ -47,7 +37,7 @@ in {
       # (non-exhaustive)
       # TODO: find better solution
       # move this to inside the wm
-      default = (mutuallyInclusive (attrNames usr.wm) [ "hyprland" "sway" "river" ]);
+      default = mutuallyInclusive enabledWms ["hyprland" "sway" "river"];
       readOnly = true;
       description = ''
         Whether to enable wayland only packages, environment variables,
@@ -58,14 +48,14 @@ in {
   };
 
   config = mkIf config.hardware.graphics.enable (mkMerge [{
-    warnings = optional (length (attrNames cfg.wm) > 1) ''
+    warnings = optional (length enabledWms) > 1) ''
       You have more then one window manager enabled, this may break
       functionality if you have not ensured options handle this correctly.
     '';
 
-    environment.systemPackages = mapAttrsToList (_: x: x.package) cfg.wm;
   }
-
+  # TODO instead of making these system wide I need to apply a wrapper around each wm 
+  # so that it doesn't fuck up wayland and x11 bastard children configs
   (mkIf cfg.isWayland {
     security = {
       polkit.enable = mkDefault true;
@@ -83,22 +73,6 @@ in {
 	group = "wheel";
       };
     };
-    
-    # TODO wrap specifically wayland wms with these
-    environment.variables = mkDefaultAttr {
-      _JAVA_AWT_WM_NONEREPARENTING = "1";
-      NIXOS_OZONE_WL = "1";
-      GDK_BACKEND = "wayland,x11";
-      ANKI_WAYLAND = "1";
-      MOZ_ENABLE_WAYLAND = "1";
-      XDG_SESSION_TYPE = "wayland";
-      SDL_VIDEODRIVER = "wayland";
-      CLUTTER_BACKEND = "wayland";
-
-      WLR_BACKEND = "wayland";
-      WLR_RENDERER = "vulkan";
-      WLR_NO_HARDWARE_CURSORS = "1";
-    };
 
     xdg.portal = {
       enable = true;
@@ -113,6 +87,7 @@ in {
 	  default = ["gtk"];
 	  "org.freedesktop.impl.portal.Screencast" = ["${portal}"];
 	  "org.freedesktop.impl.portal.Screenshot" = ["${portal}"];
+	  "org.freedesktop.impl.portal.Inhibit" = "none";
 	};
       };
 
@@ -131,7 +106,7 @@ in {
   })
 
   (mkIf !cfg.isWayland {
-    warnings = optional (cfg.wm == {}) ''
+    warnings = optional (cfg.wm.default == null) ''
       You have no window manager enabled, you will not boot
       into a graphical environment.
     ''

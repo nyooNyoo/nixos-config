@@ -1,7 +1,6 @@
 {
   imports = [
+    # Sway Window Manager
     ./sway
-    ./hyprland
-    ./river
   ];
 }
