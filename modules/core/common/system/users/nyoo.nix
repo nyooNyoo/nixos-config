@@ -1,7 +1,4 @@
 {
-  pkgs,
-  ...
-}: {
   users.users.nyoo = {
     isNormalUser = true;
     uid = 1000;

@@ -32,7 +32,7 @@ in {
         kernelParams = ["i915.fastboot=1" "enable_gvt=1"];
       };
 
-      environmwnt.systemPackages = with pkgs; [intel-gpu-tools]
+      environment.systemPackages = with pkgs; [intel-gpu-tools];
     })
 
     (mkIf isAmd {

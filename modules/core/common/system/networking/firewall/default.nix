@@ -1,14 +1,4 @@
 {
-  pkgs,
-  lib,
-  config,
-  ...
-}: let
-  inherit (lib.modules) mkForce;
-in {
-
-  networking.firewall.enable = false; 
-
   networking.nftables = {
     enable = true;
     flushRuleset = true;

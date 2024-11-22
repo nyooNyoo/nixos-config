@@ -8,7 +8,7 @@
 
   cfg = config.modules.system.boot;
 in {
-  import = [
+  imports = [
     # Options and config for bootloaders
     ./loaders.nix
     # Options and config plymouth splash screen 

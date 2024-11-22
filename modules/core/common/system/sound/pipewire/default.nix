@@ -46,7 +46,7 @@ in {
 	  }
 	  # Taken from example
 	  # Speech dispatcher asks for too small latency and then underruns.
-	  { matches = ["application.name" = "~speech-dispatcher*";];
+	  { matches = [{"application.name" = "~speech-dispatcher*";}];
 	    actions = {
 	      update-props = {
 	        "pulse.min.req" = "1024/48000";

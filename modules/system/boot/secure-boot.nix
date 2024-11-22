@@ -28,7 +28,7 @@ in {
     ];
 
     boot = {
-      systemd.extraBin.sbctl = getExe pkgs.sbctl;
+      initrd.systemd.extraBin.sbctl = getExe pkgs.sbctl;
       loader.systemd-boot.enable = mkForce false;
       lanzaboote = {
         enable = true;

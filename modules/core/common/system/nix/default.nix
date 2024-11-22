@@ -17,10 +17,9 @@ in {
   ];
 
   nix = let
-    GB = x: "${x * 1024 * 1024 * 1024}"
+    GB = x: toString(x * 1024 * 1024 * 1024);
 
   in {
-    # Not to get political or anything 
     package = mkDefault pkgs.lix;
 
     daemonCPUSchedPolicy = mkDefault "idle";

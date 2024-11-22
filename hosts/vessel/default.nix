@@ -18,27 +18,14 @@
   [
     R
     rstudio
-    (python3.withPackages ( ps: with ps; [
+    (python3.withPackages (ps: with ps; [
       dbus-python
     ]))
     unzip
     openvpn
-    openvpn3
-    winetricks
-    wineWowPackages.waylandFull
+    logisim
   ];
-
-  hardware = {
-    graphics.enable = true;
     
-    nvidia = {
-      modesetting.enable = true;
-
-      # turn off gpu when not in use
-      powerManagement.enable = true;
-      powerManagement.finegrained = true;
-    };
-  };
   boot = {
     extraModprobeConfig = ''
       options iwlwifi power_save=1 disable_11ax=1
@@ -54,20 +41,35 @@
         cpu.type = "intel";
         gpu.type = [ "intel" "hybrid-nvidia" ];
 
+        tpm.enable = true;
         bluetooth.enable = true;
-        yubikeySupport.enable = false;
-        sound.enable = true;
+
+        yubikey = {
+	  #enable = true;
+	  cliTools.enable = true;
+	};
       };
 
       boot = {
         plymouth.enable = true;
-        silentBoot.enable = true;
-        greeter = {
+        silent.enable = true;
+
+        greetd = {
+	  enable = true;
           autologin = {
             enable = true;
             user = "nyoo";
           };
         };
+      };
+
+      sound = {
+        enable = true;
+
+	realtime = {
+	  enable = true;
+	  soundcardPci = "0000:00:1f.3";
+	};
       };
 
       encryption = {
@@ -81,23 +83,20 @@
         enabledFilesystems =
         [
           "vfat"
+	  "fat32"
           "btrfs"
         ];
       };
+
+      display = {
+        wm.default = config.modules.system.display.wm.sway.package;
+	wm.sway.enable = true;
+      };
     };
     
-    user = {
-      wm = {
-        sway = {
-          enable = true;
-        };
-      };
-      mainUser = "nyoo";
-
-      programs = {
-        nvim = {
-          enable = true;
-        };
+    programs = {
+      nvim = {
+        enable = true;
       };
     };
   };

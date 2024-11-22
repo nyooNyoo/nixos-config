@@ -1,10 +1,10 @@
 {lib, ...}: let
   inherit (lib.modules) mkForce mkDefault mkOptionDefault;
-  inherit (lib.attrsets) mapAttrRecursive;
+  inherit (lib.attrsets) mapAttrsRecursive;
 
-  mkForceAttr = mapAttrRecursive (_: v: mkForce v);
-  mkDefaultAttr = mapAttrRecursive (_: v: mkDefault v);
-  mkOptionDefaultAttr = mapAttrRecursive (_: v: mkOptionDefault v);
+  mkForceAttr = mapAttrsRecursive (_: v: mkForce v);
+  mkDefaultAttr = mapAttrsRecursive (_: v: mkDefault v);
+  mkOptionDefaultAttr = mapAttrsRecursive (_: v: mkOptionDefault v);
 
 in {
   inherit mkForceAttr;

@@ -21,6 +21,7 @@ in {
     };
   };
 
+  # TODO mkMerge this
   config = let
     isPipewire = (cfg.type == "pipewire");
 

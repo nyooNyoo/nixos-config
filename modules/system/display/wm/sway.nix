@@ -6,11 +6,10 @@
   ...
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
-  inherit (lib.modules) mkIf;
-  inherit (lib.writers) writeText;
+  inherit (lib.modules) mkIf mkMerge mkDefault mkForce;
   inherit (lib.strings) readFile;
-  inherit (lib.types) lines;
-  inherit (lib.lists) optional;
+  inherit (lib.types) package lines listOf;
+  inherit (lib.lists) optional mutuallyInclusive;
   inherit (lib.meta) getExe getExe';
 
   isNvidia = mutuallyInclusive ["nvidia" "hybrid-nvidia"] config.modules.system.hardware.gpu.type;
@@ -22,7 +21,7 @@ in {
     package = mkPackageOption pkgs "sway" {} // {
       apply = p: p.override {
         extraSessionCommands = cfg.extraSessionCommands;
-	extraOptions = ["--config" "${writeText "sway-config" configFile}"]
+	extraOptions = ["--config" "${pkgs.writeText "sway-config" cfg.config}"]
           ++ optional isNvidia "--unsupported-gpu";
 	withBaseWrapper = true;
 	withGtkWrapper = true;
@@ -49,7 +48,7 @@ in {
 	export WLR_RENDERER=vulkan
 	export WLR_NO_HARDWARE_CURSORS=1
       '';
-      desciption = ''
+      description = ''
         Shell commands executed just before Sway is started.
       '';
     };
@@ -83,24 +82,25 @@ in {
     };
   };
 
-  config.programs.sway.enable = mkForce false;
+  config = mkMerge [
+    {programs.sway.enable = mkForce false;}
 
-  config = mkIf cfg.enable {
+  (mkIf cfg.enable {
     # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
-    xdg.portal.wlr.settings.chooser_cmd = mkDefault ''
-      ${getExe' cfg.package "swaymsg"} -t get_tree |\
-      ${getExe jq} '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' |\
-      ${getExe slurp}
-    '';
+    # TODO parser doesn't accept this
+    #xdg.portal.wlr.settings.chooser_cmd = mkDefault (toString (
+    #  ''${getExe' cfg.package "swaymsg"} -t get_tree | '' +
+    #  ''${getExe pkgs.jq} '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | '' +
+    #  ''${getExe pkgs.slurp}''));
 
     environment = {
       systemPackages = [cfg.package] ++ cfg.extraPackages;
 
       etc = {
-        "sway/config.d/nixos.conf".source = writeText "nixos.conf" ''
+        "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
 	  exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
 	'';
       };
     };
-  };
+  })];
 }

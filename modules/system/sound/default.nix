@@ -7,7 +7,7 @@
   
   cfg = config.modules.system.sound;
 in {
-  import = cfg.enable [
+  imports = [
     # Defines current sound server.
     ./servers.nix
     # Adds realtime audio option and functionality.
@@ -15,8 +15,6 @@ in {
   ];
 
   options.modules.system.sound = {
-    enable = mkEnableOption "Sound capabilities."; // {
-      default = true;
-    };
+    enable = mkEnableOption "Sound capabilities." // {default = true;};
   };
 }

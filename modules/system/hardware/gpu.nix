@@ -62,10 +62,11 @@ in {
           intel-media-driver
           intel-compute-runtime
           vpl-gpu-rt
-          libvdau-va-gl
+          libvdpau-va-gl
         ];
 
-        extraPackages32 = with pkgs; [ intel-media-driver-32 ];
+        extraPackages32 = with pkgs; [ driversi686Linux.intel-media-driver ];
+      };
        
       boot = {
         # TODO benchmark xe driver 
@@ -91,8 +92,8 @@ in {
     in {
       hardware = {
         nvidia = {
-          package = mkDefault nvidiaPackage
-	  modesettings.enable = mkDefault true;
+          package = mkDefault nvidiaPackage;
+	  modesetting.enable = mkDefault true;
 
 	  prime.offload = {
 	    enable = mkDefault isHybrid;
@@ -110,7 +111,7 @@ in {
 
         graphics = {
           extraPackages = with pkgs; [ nvidia-vaapi-driver ];
-	  extraPackages32 = with pkgs; [ pkgs1686Linux.nvidia-vaapi-driver ];
+	  extraPackages32 = with pkgs; [ pkgsi686Linux.nvidia-vaapi-driver ];
         };
       };
 

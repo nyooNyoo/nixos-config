@@ -1,16 +1,10 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}: let
-  inherit (lib.modules) mkIf mkForce;
+{pkgs, lib, ...}: let
+  inherit (lib.modules) mkDefault mkForce;
+
 in {
   imports = [
+    # Default firewall rules.
     ./firewall
-    
-    #./network-manager.nix
-    ./ssh.nix
   ];
 
   # Helpful networking tools
@@ -39,11 +33,10 @@ in {
     # Allows some shorthand to access hosts
     search = ["nyoo.dev."];
     networkmanager = {
-      enable = true;
-      unmanaged = ["docker0"];
+      enable = mkDefault true;
       wifi = {
-        macAddress = "random";
-        powersave = true;
+        macAddress = mkDefault "random";
+        powersave = mkDefault true;
       };
     };
   };

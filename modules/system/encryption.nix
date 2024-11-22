@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   ...
@@ -11,8 +12,8 @@
 
   mapKeys = concatMapAttrs (_: attr:
     if (attr.keyFile or null != null)
-    then { ${attr.keyFile} = attr.keyFile }
-    else {};
+    then {${attr.keyFile} = attr.keyFile;}
+    else {});
 
   cfg = config.modules.system.encryption;
 in {
@@ -64,7 +65,7 @@ in {
 	  "usb_storage"
         ];
 
-	systemd.extraBin.cryptsetup = getExe ${pkgs.cryptsetup};
+	systemd.extraBin.cryptsetup = getExe pkgs.cryptsetup;
 
 	secrets = mkIf cfg.rdKeyFiles (mapKeys cfg.devices); 
 

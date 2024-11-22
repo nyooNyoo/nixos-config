@@ -9,8 +9,8 @@
 in {
   programs.zsh = {
     # Enable when required.
-    enable = mkDefault config.users.defaultUserShell == pkgs.zsh ||
-      attrAny (x: x.shell == pkgs.zsh) config.users.users;
+    enable = mkDefault (config.users.defaultUserShell == pkgs.zsh ||
+      attrAny (x: x.shell == pkgs.zsh) config.users.users);
 
     promptInit = ''eval "$(${pkgs.starship}/bin/starship init zsh)"'';
     enableCompletion = true;

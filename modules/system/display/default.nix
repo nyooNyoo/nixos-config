@@ -8,8 +8,8 @@
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
   inherit (lib.modules) mkIf mkMerge mkDefault mkDefaultAttr mkOptionDefault;
   inherit (lib.types) nullOr bool package;
-  inherit (lib.attrsets) attrNames filterAttrs headAttrs;
-  inherit (lib.lists) mutuallyInclusive optional length;
+  inherit (lib.attrsets) attrNames filterAttrs;
+  inherit (lib.lists) mutuallyInclusive optional length head;
   inherit (lib.meta) getExe;
 
   enabledWms = attrNames (filterAttrs (_: v: (v.enable or false && v ? package)) cfg.wm);
@@ -18,7 +18,7 @@
 in {
   imports = [
     # Import specific wrapper stuff for implemented wms.
-    ./wms
+    ./wm
   ];
 
   options.modules.system.display = {
@@ -48,7 +48,7 @@ in {
   };
 
   config = mkIf config.hardware.graphics.enable (mkMerge [{
-    warnings = optional (length enabledWms) > 1) ''
+    warnings = optional ((length enabledWms) > 1) ''
       You have more then one window manager enabled, this may break
       functionality if you have not ensured options handle this correctly.
     '';
@@ -105,10 +105,10 @@ in {
     };
   })
 
-  (mkIf !cfg.isWayland {
+  (mkIf (!cfg.isWayland) {
     warnings = optional (cfg.wm.default == null) ''
       You have no window manager enabled, you will not boot
       into a graphical environment.
-    ''
+    '';
   })]);
 }

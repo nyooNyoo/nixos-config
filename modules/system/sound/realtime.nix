@@ -28,6 +28,7 @@ in {
 
     soundcardPci = mkOption {
       type = nullOr str;
+      # Might be able to default to an onboard?
       default = null;
       description = ''
         The PCI ID of your primary soundcard.

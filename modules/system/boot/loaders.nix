@@ -13,18 +13,18 @@
       useOSProber = mkDefault true;
       efiSupport = mkDefault true;
       device = mkDefault "nodev";
-      inherit (cfg) memtest86.enable;
+      memtest86.enable = cfg.memtest86.enable;
     }; 
 
     systemd-boot = {
       enable = true;
       consoleMode = "max";
-      editor = false
-      inherit (cfg) memtest86.enable;
+      editor = false;
+      memtest86.enable = cfg.memtest86.enable;
     };
   };
 
-  cfg = config.modules.systemd.boot.loader;
+  cfg = config.modules.system.boot.loader;
 in {
   options.modules.system.boot.loader = {
     type = mkOption {
@@ -37,9 +37,9 @@ in {
     };
 
     memtest86 = {
-      enable = mkEnableOption "memtest86." // {default = true;};
+      enable = mkEnableOption "Memtest86." // {default = true;};
     };
   };
 
-  config.boot.loader = {inherit (loader) ${cfg.type};};
+  config.boot.loader.${cfg.type} = loader.${cfg.type};
 }

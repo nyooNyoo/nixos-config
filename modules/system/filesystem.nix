@@ -18,8 +18,8 @@ in {
 
     btrfs = {
       scrub = {
-        enable = mkEnableOption "automatically scrub (error correct) btrfs subvolumes" //
-          {default = elem ;};
+        enable = mkEnableOption "automatically scrub (error correct) btrfs subvolumes" // {
+	  default = elem "btrfs" cfg.enabledFilesystems;};
         interval = mkOption {
           type = str;
           default = "Sun"; #Sunday
@@ -54,11 +54,11 @@ in {
     };
 
     warnings = 
-      if (cfg.enabledFilesystems = [])
+      if (cfg.enabledFilesystems == [])
       then [''
         There are no filesystems configured, this may cause issues mounting and accessing.
       '']
-      else if !(elem "vfat" enabledFilesystems)
+      else if !(elem "vfat" cfg.enabledFilesystems)
       then [''
         'vfat' is not included in enabled filsystems (commonly the boot partition).
       '']

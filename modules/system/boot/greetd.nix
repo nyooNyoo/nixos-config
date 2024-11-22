@@ -4,10 +4,11 @@
   lib,
   ...
 }: let
-  inherit (lib.options) mkOption mkEnableOption;
+  inherit (lib.options) mkOption mkEnableOption mkPackageOption;
   inherit (lib.modules) mkIf mkDefault;
   inherit (lib.strings) concatStringsSep;
-  inherit (lib.attrsets) attrHead;
+  inherit (lib.attrsets) attrHead attrNames filterAttrs;
+  inherit (lib.types) str listOf enum;
   inherit (lib.meta) getExe;
 
   cfg = config.modules.system.boot.greetd;
@@ -34,9 +35,9 @@ in {
     greeterArgs = mkOption {
       type = listOf str;
       default = [
-      "--time"
-      "--remember"
-      "--asterisks-char" "\"-\""
+        "--time"
+        "--remember"
+        "--asterisks-char" "\"-\""
       ];
       description = ''
         Command line arguments applied to the greeter.
@@ -48,7 +49,7 @@ in {
 
       user = mkOption {
         type = enum (attrNames config.users.users);
-	default = usr.mainUser;
+	default = attrHead (filterAttrs (n: _: n != "root") config.users.users);
 	description = ''
 	  Determines which user is automatically logged in.
 	'';
