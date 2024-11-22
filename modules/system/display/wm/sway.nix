@@ -35,7 +35,7 @@ in {
       default = ''
         export XDG_SESSION_DESKTOP=sway
 	export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-	export _JAVA_AWT_WM_NONEREPARENTING=1
+	export _JAVA_AWT_WM_NONREPARENTING=1
 	export NIXOS_OZONE_WL=1
 	export GDK_BACKEND=wayland,x11
 	export ANKI_WAYLAND=1
