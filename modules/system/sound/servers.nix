@@ -4,11 +4,10 @@
   ...
 }: let
   inherit (lib.options) mkOption;
-  inherit (lib.modules) mkIf mkForce mkOptionDefault;
+  inherit (lib.modules) mkIf mkMerge mkForce mkDefault;
   inherit (lib.types) enum;
 
   cfg = config.modules.system.sound.server;
-  hasSound = config.modules.system.sound.enable;
 in {
   options.modules.system.sound.server = {
     type = mkOption {
@@ -21,26 +20,27 @@ in {
     };
   };
 
-  # TODO mkMerge this
-  config = let
-    isPipewire = (cfg.type == "pipewire");
+  config = mkIf config.modules.system.sound.enable (mkMerge [
+    (mkIf (cfg.type == "pipewire") {
+      security.rtkit.enable = mkForce true;
 
-  in mkIf hasSound {
-    hardware.pulseaudio.enable = !isPipewire;
 
-    security.rtkit.enable = if isPipewire then mkForce true else mkOptionDefault false;
+      services.pipewire = {
+        enable = mkForce true;
+	audio.enable = mkDefault true;
+	pulse.enable = mkDefault true;
+	alsa.enable = mkDefault true;
+	wireplumber.enable = mkDefault true;
+      };
 
-    services.pipewire = mkIf isPipewire {
-      enable = true;
-      audio.enable = true;
-      pulse.enable = true;
-      alsa.enable = true;
-      wireplumber.enable = true;
-    };
+      systemd.user.services = {
+        pipewire.wantedBy = ["default.target"];
+	pipewire-pulse.wantedBy = ["default.target"];
+      };
+    })
 
-    systemd.user.services = mkIf isPipewire {
-      pipewire.wantedBy = ["default.target"];
-      pipewire-pulse.wantedBy = ["default.target"];
-    };
-  };
+    (mkIf (cfg.type == "pulseaudio") {
+      hardware.pulseaudio.enable = mkForce true;
+    })
+  ]);
 }

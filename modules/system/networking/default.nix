@@ -5,7 +5,9 @@
   ...
 }: let
   inherit (lib.options) mkOption mkEnableOption;
+  inherit (lib.modules) mkIf mkDefault;
 
+  cfg = config.modules.system.networking;
 in {
   imports = [
     # Firewall options.
@@ -17,5 +19,9 @@ in {
 
   options.modules.system.networking = {
     enable = mkEnableOption "Networking." // {default = true;};
+  };
+
+  config = mkIf cfg.enable {
+    services.resolved.dnssec = mkDefault "allow-downgrade";
   };
 }

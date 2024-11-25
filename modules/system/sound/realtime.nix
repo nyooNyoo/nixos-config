@@ -11,11 +11,10 @@
   inherit (lib.modules) mkIf mkDefault;
   inherit (lib.strings) optionalString makeSearchPath;
   inherit (lib.types) nullOr str;
-  inherit (lib.lists) optionals;
+  inherit (lib.lists) optionals optional;
   inherit (lib.meta) getExe';
 
   cfg = config.modules.system.sound.realtime;
-  hasSound = config.modules.system.sound.enable;
 in {
   options.modules.system.sound.realtime = {
     enable = mkEnableOption "Realtime sound optimizations.";
@@ -38,8 +37,12 @@ in {
       '';
     };
 
+    rtcqs = {
+	enable = mkEnableOption "RealTime Config QuickScan package.";
+    };
+
   };
-  config = mkIf (hasSound && cfg.enable) {
+  config = mkIf (config.modules.system.sound.enable && cfg.enable) {
     boot = {
       kernel.sysctl = {
         "vm.swappiness" = 10;
@@ -55,7 +58,8 @@ in {
 	${getExe' pkgs.pciutils "setpci"} -v -s ${cfg.soundcardPci} latency_timer=ff
       '';
     };
-
+    # TODO wrap the bin name
+    environment.systemPackages = optional cfg.rtcqs.enable pkgs.real_time_config_quick_scan;
     environment.sessionVariables = let
       makeSearchPath' = subDir: (makeSearchPath subDir [
         "$HOME/.nix-profile/lib"

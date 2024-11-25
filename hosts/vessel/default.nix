@@ -69,6 +69,7 @@
 	realtime = {
 	  enable = true;
 	  soundcardPci = "0000:00:1f.3";
+	  rtcqs.enable = true;
 	};
       };
 

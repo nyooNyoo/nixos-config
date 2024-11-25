@@ -1,4 +1,4 @@
-{lib, hostname, ...}: let
+{lib, ...}: let
   inherit (lib.modules) mkDefaultAttr;
   inherit (lib.lists) singleton;
 
@@ -15,11 +15,9 @@ in {
         "context.properties" = {
 	  "clock.power-of-two-quantum" = true;
 	  "core.daemon" = true;
-	  "core.name" = "pipewire-${hostname}";
 	  # More buffers are worse latency and memory wise.
 	  "link.max-buffers" = 16;
 	};
-
         # Taken from the example
 	"context.spa-libs" = {
 	  "audio.convert.*" = "audioconvert/libspa-audioconvert";
@@ -35,7 +33,6 @@ in {
 	};
       };
     };
-
     pipewire-pulse = {
       # https://docs.pipewire.org/page_man_pipewire-pulse_conf_5.html
       "10-defaults" = mkDefaultAttr {
@@ -58,10 +55,9 @@ in {
 
         "pulse.cmd" = [
 	# Forces a sink to always be present, even if null.
-        {cmd = "load=module"; args = "module-always-sink"; flags = [];}
+        {cmd = "load-module"; args = "module-always-sink"; flags = [];}
 	];
       };
     };
-    
   };
 }
