@@ -12,10 +12,6 @@ in {
   options.modules.system.networking.ssh = {
     enable = mkEnableOption "Secure Shell.";
 
-    forceKey = mkEnableOption "Authentication forced through ssh key." // {
-      default = true;
-    };
-
     # Traps attackers trying to access an open default ssh port
     tarpit = {
       enable = mkEnableOption "Endlessh tarpit" // {default = (cfg.port != 22);};
@@ -24,9 +20,9 @@ in {
 	default = 22;
 	apply = p: if (p != cfg.port)
 	  then p
-	  else if (cfg.port != 22)
-	  then 22
-	  else 21;
+	  else if (p == 22)
+	    then 22
+	    else 21;
 	description = ''
 	  Port opened to the endlessh server, 22 would be the most effective as a trap.
 	  Ensure this is not the same port opened for the real ssh server.
@@ -57,12 +53,14 @@ in {
 
         settings = {
 	  PermitRootLogin = mkDefault "no"; 
-	  PasswordAuthentication = !cfg.forceKey;
-	  ChallengeResponseAuthentication = mkDefault "no";
-	  UsePAM = !cfg.forceKey;
 
-          KbdInteractiveAuthentication = !cfg.forceKey;
-	  UseDns = false;
+          # Security
+	  PasswordAuthentication = false;
+	  AuthenticationMethods = "publickey";
+	  ChallengeResponseAuthentication = false;
+          KbdInteractiveAuthentication = false;
+	  AllowStreamLocalForwarding = false;
+	  AllowTcpForwarding = "yes";
 	  X11Forwarding = false;
 
 	  PerSourceMaxStartups = 1;

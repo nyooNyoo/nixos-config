@@ -10,7 +10,8 @@
     ./encryption.nix
 
     # Options to enable filesystem modules and filesystem exclusive features
-    ./filesystem.nix
+    # TODO should this be renamed disk and include encryption module
+    ./filesystem
 
     # Options to set hardware specifications and capabilities
     ./hardware

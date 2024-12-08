@@ -8,7 +8,6 @@
   inherit (lib.modules) mkIf mkMerge mkDefault;
   inherit (lib.types) enum;
 
-  hasNetworking = config.modules.system.networking.enable;
   cfg = config.modules.system.networking.firewall;
 in {
   options.modules.system.networking.firewall = {
@@ -20,7 +19,7 @@ in {
     networking.firewall.enable = cfg.enable;
   }
 
-  (mkIf (hasNetworking && cfg.enable) {
+  (mkIf (config.modules.system.networking.enable && cfg.enable) {
     networking = {
       firewall = {
         package = pkgs.nftables;

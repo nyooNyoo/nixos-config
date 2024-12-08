@@ -10,7 +10,7 @@
   inherit (lib.options) mkOption mkEnableOption;
   inherit (lib.modules) mkIf mkDefault;
   inherit (lib.strings) optionalString makeSearchPath;
-  inherit (lib.types) nullOr str;
+  inherit (lib.types) nullOr coercedTo str int;
   inherit (lib.lists) optionals optional;
   inherit (lib.meta) getExe';
 
@@ -39,6 +39,13 @@ in {
 
     rtcqs = {
 	enable = mkEnableOption "RealTime Config QuickScan package.";
+	irq = mkOption {
+	  type = nullOr (coercedTo int toString str);
+	  default = null;
+	  description = ''
+	    The IRQ of the soundcard to allow rtcqs to check if it is busy.
+	  '';
+	};
     };
 
   };
@@ -58,7 +65,7 @@ in {
 	${getExe' pkgs.pciutils "setpci"} -v -s ${cfg.soundcardPci} latency_timer=ff
       '';
     };
-    # TODO wrap the bin name
+    # TODO wrap the bin name and with irq from options.
     environment.systemPackages = optional cfg.rtcqs.enable pkgs.real_time_config_quick_scan;
     environment.sessionVariables = let
       makeSearchPath' = subDir: (makeSearchPath subDir [

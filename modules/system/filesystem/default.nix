@@ -1,15 +1,21 @@
 {
+  inputs,
   config, 
   lib,
   ...
 }: let
   inherit (lib.options) mkOption mkEnableOption;
-  inherit (lib.modules) mkIf;
+  inherit (lib.modules) mkIf mkAfter;
   inherit (lib.lists) optionals elem;
   inherit (lib.types) listOf str enum;
 
   cfg = config.modules.system.filesystem;
 in {
+  imports = [
+    # Wrapper for impermanence module.
+    ./impermanence.nix
+  ];
+
   options.modules.system.filesystem = {
     enabledFilesystems = mkOption {
       type = listOf str;
@@ -18,15 +24,21 @@ in {
 
     btrfs = {
       scrub = {
-        enable = mkEnableOption "automatically scrub (error correct) btrfs subvolumes" // {
+        enable = mkEnableOption "Automatically scrubbing (error correct) of btrfs subvolumes." // {
 	  default = elem "btrfs" cfg.enabledFilesystems;};
         interval = mkOption {
           type = str;
-          default = "Sun"; #Sunday
+          default = "Sun"; #Every Sunday
+	  description = ''
+	    Systemd time to hook the service with.
+	  '';
         };
         subvolumes = mkOption {
           type = listOf str;
           default = ["/"];
+	  description = ''
+	    Subvolumes to scrub.
+	  '';
         };
       };
     };
@@ -60,7 +72,7 @@ in {
       '']
       else if !(elem "vfat" cfg.enabledFilesystems)
       then [''
-        'vfat' is not included in enabled filsystems (commonly the boot partition).
+        'vfat' is not included in enabled filsystems (defaultly the boot partiotion in UEFI systems).
       '']
       else [];
   };

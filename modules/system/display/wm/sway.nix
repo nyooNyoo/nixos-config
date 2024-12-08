@@ -12,7 +12,6 @@
   inherit (lib.lists) optional mutuallyInclusive;
   inherit (lib.meta) getExe getExe';
 
-  isNvidia = mutuallyInclusive ["nvidia" "hybrid-nvidia"] config.modules.system.hardware.gpu.type;
   cfg = config.modules.system.display.wm.sway;
 in {
   options.modules.system.display.wm.sway = {
@@ -22,7 +21,8 @@ in {
       apply = p: p.override {
         extraSessionCommands = cfg.extraSessionCommands;
 	extraOptions = ["--config" "${pkgs.writeText "sway-config" cfg.config}"]
-          ++ optional isNvidia "--unsupported-gpu";
+          ++ optional (mutuallyInclusive ["nvidia" "hybrid-nvidia"] config.modules.system.hardware.gpu.type) 
+	  "--unsupported-gpu";
 	withBaseWrapper = true;
 	withGtkWrapper = true;
 	enableXWayland = cfg.xwayland.enable;
@@ -53,6 +53,7 @@ in {
       '';
     };
 
+    # TODO run a system check with 'sway -C'
     config = mkOption {
       type = lines;
       default = readFile "${cfg.package}/etc/sway/config";

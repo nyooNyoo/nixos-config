@@ -7,12 +7,14 @@
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
   inherit (lib.modules) mkIf mkMerge mkDefault mkDefaultAttr mkOptionDefault;
-  inherit (lib.types) nullOr bool package;
+  inherit (lib.types) nullOr bool str package either;
   inherit (lib.attrsets) attrNames filterAttrs;
-  inherit (lib.lists) mutuallyInclusive optional length head;
+  inherit (lib.lists) mutuallyInclusive optional length head elem;
   inherit (lib.meta) getExe;
 
-  enabledWms = attrNames (filterAttrs (_: v: (v.enable or false && v ? package)) cfg.wm);
+  enabledWms = attrNames 
+    (filterAttrs (_: v: v.enable or false && v ? package) 
+      (removeAttrs cfg.wm ["default"]));
 
   cfg = config.modules.system.display;
 in {
@@ -23,12 +25,15 @@ in {
 
   options.modules.system.display = {
     wm.default = mkOption {
-      type = nullOr package;
-      default = if (length enabledWms == 0)
-        then null
-	else cfg.wm.${head enabledWms}.package;
+      type = nullOr str;
+      default = if ((length enabledWms) > 0)
+	then (head enabledWms)
+        else null;
+      apply = w: if (elem w enabledWms)
+      	then cfg.wm.${w}.package
+	else null;
       description = ''
-        Determines some default behaviors such as what to boot with.
+        Determines some default behaviors such as what to boot into.
       '';
     };
 
@@ -51,8 +56,10 @@ in {
     warnings = optional ((length enabledWms) > 1) ''
       You have more then one window manager enabled, this may break
       functionality if you have not ensured options handle this correctly.
+    '' ++ optional (cfg.wm.default == null) ''
+      Default WM is null, you may not boot
+      into a graphical environment.
     '';
-
   }
   # TODO instead of making these system wide I need to apply a wrapper around each wm 
   # so that it doesn't fuck up wayland and x11 bastard children configs
@@ -103,12 +110,5 @@ in {
 	};
       };
     };
-  })
-
-  (mkIf (!cfg.isWayland) {
-    warnings = optional (cfg.wm.default == null) ''
-      You have no window manager enabled, you will not boot
-      into a graphical environment.
-    '';
   })]);
 }

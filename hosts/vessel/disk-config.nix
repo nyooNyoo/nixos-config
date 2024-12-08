@@ -4,6 +4,7 @@
 }:
 {
   imports = [ inputs.disko.nixosModules.default ];
+
   disko.devices = {
     disk = {
       main = {
@@ -29,10 +30,6 @@
               content = {
                 type = "luks";
                 name = "crypted-1";
-                settings = {
-                  allowDiscards = true;
-                  keyFile = "/secrets/luks.key";
-                };
                 content = {
                   type = "btrfs";
                   extraArgs = [ "-f" "-L fsroot" ];
@@ -75,10 +72,6 @@
               content = {
                 type = "luks";
                 name = "crypted-2";
-                settings = {
-                  allowDiscards = true;
-                  keyFile = "/secrets/luks.key";
-                };
               };
             };
           };

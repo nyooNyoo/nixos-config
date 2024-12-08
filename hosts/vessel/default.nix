@@ -75,22 +75,29 @@
 
       encryption = {
         enable = true;
- 
-        devices.crypted-1.keyFile = "/secrets/luks.key";
-        devices.crypted-2.keyFile = "/secrets/luks.key";
+	rdKeyFiles = true;
+
+        devices.crypted-1 = {
+	  keyFile = "/persist/secrets/luks.key";
+	  rdKey = true;
+	};
+
+        devices.crypted-2 = {
+	  keyFile = "/persist/secrets/luks.key";
+	  rdKey = true;
+	};
       };
 
       filesystem = {
         enabledFilesystems =
         [
           "vfat"
-	  "fat32"
           "btrfs"
         ];
       };
 
       display = {
-        wm.default = config.modules.system.display.wm.sway.package;
+        wm.default = "sway";
 	wm.sway.enable = true;
       };
     };
@@ -104,6 +111,11 @@
   
   boot.initrd.secrets = {
     "/secrets/luks.key" = "/persist/secrets/luks.key";
+  };
+
+  boot.initrd.luks.devices = {
+    crypted-1.keyFile = "/secrets/luks.key";
+    crypted-2.keyFile = "/secrets/luks.key";
   };
 
   system.stateVersion = "24.05";
