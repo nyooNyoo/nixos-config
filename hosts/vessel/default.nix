@@ -32,7 +32,6 @@
     '';
   };
 
-  services.fwupd.enable = true;
   services.printing.enable = true;
 
   modules = {
@@ -69,22 +68,27 @@
 	realtime = {
 	  enable = true;
 	  soundcardPci = "0000:00:1f.3";
-	  rtcqs.enable = true;
+	  #rtcqs.enable = true;
 	};
       };
 
       encryption = {
         enable = true;
-	rdKeyFiles = true;
 
         devices.crypted-1 = {
-	  keyFile = "/persist/secrets/luks.key";
-	  rdKey = true;
+	  keyFile = {
+	    enable = true;
+	    rdKey = true;
+	    file = "/persist/secrets/luks.key";
+	  };
 	};
 
         devices.crypted-2 = {
-	  keyFile = "/persist/secrets/luks.key";
-	  rdKey = true;
+	  keyFile = {
+	    enable = true;
+	    rdKey = true;
+	    file = "/persist/secrets/luks.key";
+	  };
 	};
       };
 
@@ -109,15 +113,6 @@
     };
   };
   
-  boot.initrd.secrets = {
-    "/secrets/luks.key" = "/persist/secrets/luks.key";
-  };
-
-  boot.initrd.luks.devices = {
-    crypted-1.keyFile = "/secrets/luks.key";
-    crypted-2.keyFile = "/secrets/luks.key";
-  };
-
   system.stateVersion = "24.05";
 }
 

@@ -7,7 +7,7 @@
   inherit (lib.attrsets) mapAttrs concatMapAttrs;
   inherit (lib.modules) mkIf;
   inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.types) str nullOr attrsOf submodule path;
+  inherit (lib.types) str nullOr attrsOf submodule path int listOf package;
   inherit (lib.lists) optional;
   inherit (lib.meta) getExe;
   inherit (builtins) baseNameOf;
@@ -18,36 +18,50 @@ in {
   options.modules.system.encryption = {
     enable = mkEnableOption "LUKS encryption.";
 
-    rdKeyFiles = mkEnableOption "Storing of keyfiles into rd.";
-
-    #TODO; eventually make an entire authentication factorization queue system
-    # yubikey 
-    # keyFile
-    # TPM
-    # password
-    # fingerprint
-    # require x/y auth methods and assign priority/values
-    fingerPrint = {
-      enable = mkEnableOption "Fingerprint decode using compatable sensors.";
-    };
-
     devices = mkOption {
       default = {};
       type = attrsOf (submodule (
         {name, ...}: { 
           options = {
 
-            keyFile = mkOption {
-              default = null;
-              type = nullOr path;
-              description = ''
-                The name of the file that should
-                be used as the decryption key for the encrpyed device.
-                If not specified you will be prompted for passphrase.
-              '';
-            };
+            keyFile = {
+	      enable = mkEnableOption "Key decode using key stored in secure file.";
+	      rdKey = mkEnableOption "Auto store the keyfile in initrd.";
+	      file = mkOption {
+                type = nullOr path;
+                default = null;
+                description = ''
+                  The name of the file that should
+                  be used as the decryption key for the encrpyed device.
+                '';
+              };
+	    };
 
-	    rdKey = mkEnableOption "Auto store the keyfile in initrd.";
+            # TODO implement all
+	    yubikey = {
+	      enable = mkEnableOption "Key decode using yubikey fido device.";
+	      slot = mkOption {
+	        type = int;
+		default = 2;
+		description = ''
+		  Yubikey challenge slot.
+		'';
+	      };
+	    };
+
+	    fingerPrint = {
+	      enable = mkEnableOption "Key decode using encrypted fingerprint data.";
+	      packages = mkOption {
+	        type = listOf package;
+		default = [pkgs.fprintd];
+		description = ''
+		  Extra packages or drivers needed to interact with the reader.
+		'';
+	      };
+	    };
+
+            # ideally tpm2-with-pin
+	    tpm.enable = mkEnableOption "Key decode with hardware tpm.";
           };
         }
       ));
@@ -72,12 +86,12 @@ in {
 
 	systemd.extraBin.cryptsetup = getExe pkgs.cryptsetup;
 
-	luks.devices = mapAttrs (name: attr: {
-	  inherit name;
-
-	  keyFile = if attr.rdKey
-	    then "/secrets/" + baseNameOf attr.keyFile
-	    else attr.keyFile;
+	luks.devices = mapAttrs (_: attr: {
+	  keyFile = if attr.keyFile.enable
+	    then if attr.keyFile.rdKey
+	      then "/secrets/" + baseNameOf attr.keyFile.file
+	      else attr.keyFile.file
+	    else null;
 
 	  # Improve SSD performance
 	  bypassWorkqueues = true;
@@ -86,8 +100,8 @@ in {
 
 	secrets = let
           mapKeys = concatMapAttrs (_: attr: 
-	    mkIf (attr.keyFile or null != null && attr.rdKey or false) {
-              ${"/secrets/" + baseNameOf attr.keyFile} = attr.keyFile;
+	    mkIf (attr.keyFile.enable && attr.keyFile.file != null && attr.keyFile.rdKey) {
+              ${"/secrets/" + baseNameOf attr.keyFile.file} = attr.keyFile.file;
 	    }
 	  );
 
