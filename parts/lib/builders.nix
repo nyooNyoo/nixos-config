@@ -6,7 +6,6 @@
 }: let
   inherit (inputs) self nixpkgs;
   inherit (lib) nixosSystem;
-  inherit (lib.lists) singleton concatLists;
   inherit (lib.modules) mkDefault;
   inherit (lib.attrsets) recursiveUpdate;
 
@@ -15,30 +14,27 @@
     system,
     hostname,
     modules ? [],
-    ...
-  } @ args:
-    withSystem system ({
-      inputs',
-      self',
-      ...
-    }:
+    specialArgs ? {},
+  }:
+    withSystem system (ctx:
       nixosSystem {
-        specialArgs = recursiveUpdate {
-          inherit lib inputs self inputs' self' hostname;
-        } (args.specialArgs or {});
+	inherit lib;
 
-      modules = concatLists [
-        (singleton {
-          networking.hostName = args.hostname;
-          nixpkgs = {
-            hostPlatform = mkDefault args.system;
-            flake.source = nixpkgs.outPath;
-          };
-        })
-        (singleton "${inputs.self.outPath}/hosts/${args.hostname}")
-        (args.modules)
-      ];
-    });
+        specialArgs = recursiveUpdate {
+          inherit inputs hostname;
+          inherit (ctx) inputs';
+	  inherit (ctx.self') packages;
+        } specialArgs;
+
+        modules = [
+          {
+            imports = ["${inputs.self.outPath}/hosts/${hostname}"];
+            networking.hostName = hostname;
+	    nixpkgs.hostPlatform = system;
+          }
+        ] ++ modules;
+      }
+    );
 
 in {
   inherit mkNixosSystem;

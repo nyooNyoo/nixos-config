@@ -24,4 +24,10 @@ in {
       };
     };
   };
+
+
+  console = {
+    font = "${pkgs.tamzen}/share/consolefonts/TamzenForPowerline8x16.psf";
+    packages = [pkgs.tamzen];
+  };
 }

@@ -8,6 +8,7 @@
   inherit (lib.modules) mkIf mkForce;
   inherit (lib.lists) optional;
   inherit (lib.types) nullOr str package;
+  inherit (lib.meta) getExe';
 
   cfg = config.modules.system.boot.plymouth;
 in {
@@ -41,10 +42,10 @@ in {
 
     powerManagement = {
       powerDownCommands = ''
-        ${pkgs.plymouth} --show-splash
+        ${getExe' pkgs.plymouth "plymouth"} --show-splash
       '';
       resumeCommands = ''
-        ${pkgs.plymouth} --quit
+        ${getExe' pkgs.plymouth "plymouth"} --quit
       '';
     };
   };

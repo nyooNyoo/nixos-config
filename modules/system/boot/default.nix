@@ -11,7 +11,7 @@ in {
   imports = [
     # Options and config for bootloaders
     ./loaders.nix
-    # Options and config plymouth splash screen 
+    # Plymouth options and config
     ./plymouth.nix
     # Options and config to enable secureboot
     ./secure-boot.nix

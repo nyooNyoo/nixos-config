@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, packages, ... }:
 
 {
   imports =
@@ -7,7 +7,6 @@
       ./disk-config.nix
 
       # temp testing migration files
-      ./security.nix
       ./system.nix
      
       ./firefox
@@ -50,8 +49,13 @@
       };
 
       boot = {
-        plymouth.enable = true;
+        plymouth = {
+	  enable = true;
+	  themePackage = packages.plymouth-copland-theme;
+	};
+
         silent.enable = true;
+	secureBoot.enable = true;
 
         greetd = {
 	  enable = true;

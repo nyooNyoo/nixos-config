@@ -18,7 +18,6 @@
   environment.systemPackages = with pkgs; [
     vim
     git
-    uutils-coreutils-noprefix
     btrfs-progs
     cifs-utils
     starship # having starship here means pkgs.startship will be stored during build and not during promptInit
@@ -33,6 +32,7 @@
   in {
     inherit extraConfig;
     user = {inherit extraConfig;};
+
     oomd.enableRootSlice = true;
   };
 }

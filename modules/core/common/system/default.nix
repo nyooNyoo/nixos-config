@@ -18,6 +18,13 @@
     # Default network configuration, prioritize security.
     ./networking
 
-    ./os
+    # Environment defaults.
+    ./environment
+
+    # Default fonts.
+    ./fonts.nix
+
+    # Hardened nix.
+    ./security.nix
   ];
 }

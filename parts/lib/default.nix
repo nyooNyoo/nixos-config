@@ -1,7 +1,7 @@
 { 
   inputs,
   withSystem,
-   ...
+  ...
 }: let
   inherit (inputs.nixpkgs) lib;
 
@@ -17,24 +17,16 @@
         lib = final;
       };
   in recursiveUpdate prev {
-
     # Functions for file and directories 
     files = callLibs ./files.nix;
-
     # Builders for systems
     builders = callLibs ./builders.nix;
-
     # Some helper functions for lists
     lists = callLibs ./lists.nix;
-
     # Helper functions for attrsets
     attrsets = callLibs ./attrsets.nix;
-
     # More helper functions...
     modules = callLibs ./modules.nix;
-
-    # Nixpkgs style inherits; I don't like these
-    #inherit (files) filesIn dirsIn fileNameOf;
   });
 
 
@@ -44,7 +36,6 @@
     (_: _: inputs.flake-parts.lib)
   ];
 
-  # Finally create the lib by applying the overlays onto nixpkgs
   lib' = lib.extend extensions;
 
 in {

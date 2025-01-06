@@ -50,6 +50,7 @@
       imports = [
         ./hosts
         ./parts
+	./packages
       ];
    };
 }
