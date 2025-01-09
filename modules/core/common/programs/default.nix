@@ -3,6 +3,5 @@
     ./nvim
 
     ./git.nix
-    ./zsh.nix
   ];
 }

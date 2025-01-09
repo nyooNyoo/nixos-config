@@ -2,11 +2,12 @@
   inputs,
   config, 
   lib,
+  pkgs,
   ...
 }: let
   inherit (lib.options) mkOption mkEnableOption;
   inherit (lib.modules) mkIf mkAfter;
-  inherit (lib.lists) optionals elem;
+  inherit (lib.lists) optionals optional elem;
   inherit (lib.types) listOf str enum;
 
   cfg = config.modules.system.filesystem;
@@ -64,6 +65,8 @@ in {
 	IOScedulingClass = "idle";
       };
     };
+
+    environment.systemPackages = optional (elem "btrfs" cfg.enabledFilesystems) pkgs.btrfs-progs;
 
     warnings = 
       if (cfg.enabledFilesystems == [])

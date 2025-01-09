@@ -11,6 +11,8 @@ in {
       curl
       wget
       rsync
+      git
+      cifs-utils
 
       # Text editor.
       vim 

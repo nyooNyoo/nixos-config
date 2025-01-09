@@ -1,23 +1,25 @@
 {
-  pkgs ? import <nixpkgs> {}.
+  pkgs ? import <nixpkgs> {},
   stdenvNoCC ? pkgs.stdenvNoCC,
   fetchFromGitHub ? pkgs.fetchFromGitHub,
-  lib ? pkgs.lib
+  lib ? pkgs.lib,
 }:
 
 stdenvNoCC.mkDerivation {
-  pname = "plymouth-copland-theme";
+  pname = "plymouth-hellonavi-theme";
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "mdfaisalhsn";
-    repo = "copland-plymouth-theme";
-    rev = "4e6bd8d881683044448e59ea3884e2e74940d334";
-    hash = "sha256-/w0AigJWBVdi+JQWb08sT5BgZyeprycLkMz7fuRPCHE=";
+    owner = "nyooNyoo";
+    repo = "hellonavi";
+    rev = "247f372a3c91d475a01ac20d7d79f567c21402a3";
+    hash = "sha256-YmgVko3SwALf6X8KZiUjdQAStllYVU/bVaH6gpbuBk4=";
   };
 
   postPatch = ''
-    rm README.md
+    rm readme.md
+    rm changelog.md
+    rm test_kubuntu16-10.sh
   '';
 
   dontBuild = true;
@@ -25,14 +27,14 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/plymouth/themes
-    mv copland $out/share/plymouth/themes
+    mv hellonavi $out/share/plymouth/themes
     find $out/share/plymouth/themes/ -name \*.plymouth -exec sed -i "s@\/usr\/@$out\/@" {} \;
     runHook postInstall
   '';
 
   meta = {
     description = "Plymouth boot theme inspired by Serial Experiments Lain";
-    homepage = "https://github.com/mdfaisalhsn/copland-plymouth-theme";
+    homepage = "https://github.com/yi78/hellonavi";
     platforms = lib.platforms.linux;
   };
 }
