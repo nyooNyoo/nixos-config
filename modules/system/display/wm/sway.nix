@@ -86,22 +86,22 @@ in {
   config = mkMerge [
     {programs.sway.enable = mkForce false;}
 
-  (mkIf cfg.enable {
-    # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
-    # TODO parser doesn't accept this
-    #xdg.portal.wlr.settings.chooser_cmd = mkDefault (toString (
-    #  ''${getExe' cfg.package "swaymsg"} -t get_tree | '' +
-    #  ''${getExe pkgs.jq} '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | '' +
-    #  ''${getExe pkgs.slurp}''));
+    (mkIf cfg.enable {
+      # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
+      xdg.portal.wlr.settings.screencast.chooser_cmd = mkDefault ''
+      ${getExe' cfg.package "swaymsg"} -t get_tree | \
+      ${getExe pkgs.jq} '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
+      ${getExe pkgs.slurp}'';
 
-    environment = {
-      systemPackages = [cfg.package] ++ cfg.extraPackages;
+      environment = {
+        systemPackages = [cfg.package] ++ cfg.extraPackages;
 
-      etc = {
-        "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
-	  exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
-	'';
+        etc = {
+          "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+	    exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+	  '';
+        };
       };
-    };
-  })];
+    })
+  ];
 }
