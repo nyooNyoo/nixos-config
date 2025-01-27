@@ -26,15 +26,16 @@ stdenvNoCC.mkDerivation {
 
   patches = [
     ./patches/0001-add-font-config.patch
+    ./patches/0002-navbar-tweaks.patch
   ];
 
   postPatch = ''
+    echo "${extraUserChrome}" >> userChrome.css
     sed -i "s/19171a/${backgroundDark}/g" userChrome.css
     sed -i "s/201e21/${background}/g" userChrome.css
     sed -i "s/rgba(0, 0, 0, 0)/#${border}/g" userChrome.css
     sed -i "s/Lato/${font}/g" userChrome.css
     echo '\n* { font-family: "${font}" !important; }' >> userChrome.css
-    echo "${extraUserChrome}" >> userChrome.css
   '';
 
   installPhase = ''

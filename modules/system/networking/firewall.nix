@@ -10,9 +10,9 @@
 
   cfg = config.modules.system.networking.firewall;
 in {
+  # TODO
   options.modules.system.networking.firewall = {
     enable = mkEnableOption "Firewall." // {default = true;};
-
   };
 
   config = mkMerge [{

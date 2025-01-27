@@ -1,6 +1,6 @@
 { 
   inputs,
-  withSystem,
+  config,
   ...
 }: let
   inherit (inputs.nixpkgs) lib;
@@ -11,11 +11,10 @@
   # An overlay of my library to go onto nixpkgs'
   myLib = (final: prev: let
     callLibs = module:
-      import module {
-        inherit withSystem;
+      import module (config._module.args // {
         inherit inputs;
         lib = final;
-      };
+      });
   in recursiveUpdate prev {
     # Functions for file and directories 
     files = callLibs ./files.nix;
@@ -27,6 +26,8 @@
     attrsets = callLibs ./attrsets.nix;
     # More helper functions...
     modules = callLibs ./modules.nix;
+    # Agenix creation
+    secrets = callLibs ./secrets.nix;
   });
 
 

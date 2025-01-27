@@ -47,7 +47,7 @@ in {
         enable = true;
 	openFirewall = true;
 	ports = [cfg.port];
-	logLevel = "VERBOSE";
+	#logLevel = "VERBOSE";
 
 	startWhenNeeded = mkDefault true;
 
@@ -83,6 +83,7 @@ in {
 	    "umac-128-etm@openssh.com"
 	  ];
 
+          /*
 	  Ciphers = [
 	    "aes256-gcn@openssh.com"
 	    "aes128-gcm@openssh.com"
@@ -90,6 +91,7 @@ in {
 	    "aes192-ctr"
 	    "aes128-ctr"
 	  ];
+	  */
 	};
       };
       endlessh = mkIf cfg.tarpit.enable {

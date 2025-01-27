@@ -22,6 +22,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # TODO: fix
     services.resolved.dnssec = mkDefault "allow-downgrade";
   };
 }

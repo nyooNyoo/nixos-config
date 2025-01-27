@@ -7,16 +7,19 @@
 }: let
   inherit (lib.options) mkOption mkEnableOption mkPackageOption;
   inherit (lib.modules) mkIf mkForce;
-  inherit (lib.types) listOf attrsOf oneOf enum bool int str;
-  inherit (extensions) mkExtensions;
+  inherit (lib.attrsets) mapAttrsToList foldlAttrs;
+  inherit (lib.types) listOf str;
 
   profileDir = "/var/lib/firefox/default/profile";
 
   policyFormat = pkgs.formats.json {};
-  extensions = import ./extensions.nix {inherit config lib;};
 
   cfg = config.modules.programs.firefox;
 in {
+  imports = [
+    ./extensions.nix
+  ];
+
   options.modules.programs.firefox = {
     enable = mkEnableOption "Firefox web browser.";
     package = mkPackageOption pkgs "firefox" {};
@@ -26,15 +29,6 @@ in {
       default = ["en-US"];
       description = ''
         Language-packs to install
-      '';
-    };
-
-    extensions = mkOption {
-      type = listOf (enum extensions.list);
-      default = ["ublock-origin"];
-      description = ''
-        List of firefox extensions available in the mozilla store by their
-	short id (found in the download url).
       '';
     };
 
@@ -108,17 +102,10 @@ in {
       })
     ];
 
-    environment.etc = let
-      policiesJSON = policyFormat.generate "firefox-policies.json" {
-	# Default security policies
-	policies = import ./preferences.nix {inherit pkgs;} // 
-	  # Install extensions and language-packs
-	  {ExtensionSettings = mkExtensions cfg.extensions cfg.languagePacks false;} //
-	  # User defined extras.
-	  cfg.extraPolicies;
+    environment.etc = {
+      "firefox/policies/policies.json".source = policyFormat.generate "firefox-policies.json" {
+        policies = import ./policies.nix {inherit cfg lib pkgs;} // cfg.extraPolicies;
       };
-    in {
-      "firefox/policies/policies.json".source = policiesJSON;
     };
 
     # Create ephemeral firefox profile
@@ -131,10 +118,11 @@ in {
       userContent = packages.simplefox-userContent.override {
         inherit (cfg.theme) extraUserContent;
       };
+
     in [
-    "d  ${profileDir}                        0777 root root -   -" 
-    "L+ ${profileDir}/chrome/userChrome.css  -    -    -    -   ${userChrome}"
-    "L+ ${profileDir}/chrome/userContent.css -    -    -    -   ${userContent}"
+      "d  ${profileDir}                        0777 root root -   -" 
+      "L+ ${profileDir}/chrome/userChrome.css  -    -    -    -   ${userChrome}"
+      "L+ ${profileDir}/chrome/userContent.css -    -    -    -   ${userContent}"
     ];
   };
 }
