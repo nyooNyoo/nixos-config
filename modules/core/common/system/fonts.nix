@@ -12,7 +12,7 @@ in {
       corefonts
       twemoji-color-font
       noto-fonts
-      (nerdfonts.override {fonts = ["JetBrainsMono"];})
+      nerd-fonts.jetbrains-mono
     ];
 
     fontconfig = {

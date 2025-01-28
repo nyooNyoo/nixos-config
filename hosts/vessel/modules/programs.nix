@@ -11,16 +11,15 @@
 
     firefox = {
       enable = true;
+      languagePacks = ["en-US"];
+      homePage = "https://bento.nyuku.ru";
       extensions = {
         "ublock-origin" = {};
 	"skip-redirect" = {};
-	"simple-translate" = {};
 	"frankerfacez" = {};
 	"disable-twitch-extensions" = {};
-	"bento" = {};
       }; 
 
-      languagePacks = ["en-US"];
     };
   };
 }

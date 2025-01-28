@@ -4,8 +4,8 @@
   ...
 }: let
   inherit (lib.options) mkOption;
-  inherit (lib.attrsets) attrNames listToAttrs nameValuePair mapAttrsToList;
-  inherit (lib.lists) elem map flatten optionalsWarn;
+  inherit (lib.attrsets) attrNames listToAttrs nameValuePair;
+  inherit (lib.lists) elem map;
   inherit (lib.types) attrsOf submodule path str enum;
   inherit (lib.trivial) warnIfNot;
 

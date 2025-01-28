@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation {
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "nyooNyoo";
+    owner = "nyukuru";
     repo = "hellonavi";
     rev = "247f372a3c91d475a01ac20d7d79f567c21402a3";
     hash = "sha256-YmgVko3SwALf6X8KZiUjdQAStllYVU/bVaH6gpbuBk4=";

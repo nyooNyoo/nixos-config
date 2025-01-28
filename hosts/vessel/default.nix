@@ -9,8 +9,6 @@
   
   environment.systemPackages = with pkgs; 
   [
-    R
-    rstudio
     (python3.withPackages (ps: with ps; [
       dbus-python
     ]))
